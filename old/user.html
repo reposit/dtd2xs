@@ -1,0 +1,105 @@
+<HTML>
+<HEAD>
+<!--
+<APPLET NAME="dtd2xsd" CODE="dtd2xs_applet.class" ARCHIVE="xml.jar, xt.jar" WIDTH="0" HEIGHT="0">
+</APPLET>
+-->
+<SCRIPT LANGUAGE="javascript">
+<!--
+
+function renderText(content) {
+   parent.logFrame.document.open("text/plain");
+   parent.logFrame.document.write(content);
+   parent.logFrame.document.close();
+   parent.logFrame.document.bgColor = "#ffffff";
+}
+
+function translate() {
+   renderText("Translating ...");
+   var input = document.input;
+   var relation = "";
+   for (i = 0; i < input.relation.length; ++ i)
+      if (input.relation.options[i].selected)
+         relation += "/" + input.relation.options[i].value;
+   var dtd2xsd = document.dtd2xsd;
+   dtd2xsd.translate(
+      input.dtd.value,
+      ! input.entity.checked, // resolve entity
+      ! input.comment.checked, // ignore comment
+      input.length.value,
+      input.language.options[input.language.selectedIndex].value,
+      relation,
+      input.highlight.options[input.highlight.selectedIndex].value,
+      input.occurrence.options[input.occurrence.selectedIndex].value,
+      '' // input.xsd.value
+   );
+   renderText(dtd2xsd.getLog());
+}
+
+//-->
+</SCRIPT>
+<LINK REL="stylesheet" TYPE="text/css" HREF="htm.css"/>
+</HEAD>
+<BODY BGCOLOR="#eeeeee">
+<script language="javascript">
+<!--
+   if (navigator.appName == 'Microsoft Internet Explorer' && navigator.appVersion.indexOf('MSIE 6.0') >= 0)
+      document.write('<OBJECT NAME="dtd2xsd" classid="clsid:8AD9C840-044E-11D1-B3E9-00805F499D93" WIDTH="0" HEIGHT="0" codebase="http://java.sun.com/products/plugin/1.3/jinstall-13-win32.cab#Version=1,3,0,0"><PARAM NAME="NAME" VALUE="dtd2xsd"><PARAM NAME="CODE" VALUE="dtd2xs_applet.class"><PARAM NAME="archive" VALUE="xml.jar,xt.jar"><PARAM NAME="type" VALUE="application/x-java-applet;version=1.3"><PARAM NAME="scriptable" VALUE="true"></OBJECT>');
+   else
+      document.write('<APPLET NAME="dtd2xsd" CODE="dtd2xs_applet.class" ARCHIVE="xml.jar,xt.jar" WIDTH="0" HEIGHT="0" MAYSCRIPT="true"></APPLET>');
+//-->
+</script>
+<CENTER>
+<FORM NAME="input">
+<TABLE BORDER="0">
+<TR><TH COLSPAN="2">{ XML 1.0 DTD } to { REC-xmlschema-1-20010502 }</TH></TR>
+<TR><TD COLSPAN="2"><HR></HR></TD></TR>
+<TR><TD COLSPAN="2"><A HREF="help.htm" TARGET="logFrame">Explain parameters ...</A></TD></TR>
+<TR><TD>DTD</TD><TD><INPUT NAME="dtd" SIZE="10" VALUE="test.dtd"/></TD></TR>
+<TR><TD>Map DTD entities</TD><TD><INPUT NAME="entity" TYPE="checkbox"/></TD></TR>
+<TR><TD>Map DTD comments</TD><TD><INPUT NAME="comment" TYPE="checkbox"></TD></TR>
+<TR><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Max. length comment</TD><TD><INPUT NAME="length" VALUE="100" SIZE="10"/></TD></TR>
+<TR><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Comment language</TD><TD>
+<SELECT NAME="language">
+<OPTION VALUE="" SELECTED="true">undefined</OPTION>
+<OPTION VALUE="en">English</OPTION>
+<OPTION VALUE="de">German</OPTION>
+<OPTION VALUE="fr">French</OPTION>
+</SELECT>
+</TD></TR>
+<TR><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Annotation of</TD><TD>
+<SELECT NAME="relation" MULTIPLE>
+<OPTION VALUE="element" SELECTED="true">element</OPTION>
+<OPTION VALUE="attribute" SELECTED="true">attribute</OPTION>
+<OPTION VALUE="group">group</OPTION>
+<OPTION VALUE="attributeGroup">attributeGroup</OPTION>
+<OPTION VALUE="simpleType">simpleType</OPTION>
+<OPTION VALUE="enumeration">enumeration</OPTION>
+</SELECT>
+</TD></TR>
+<TR><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Concept highlight</TD><TD>
+<SELECT NAME="highlight">
+<OPTION VALUE="2" SELECTED="true">no</OPTION>
+<OPTION VALUE="12">by space</OPTION>
+<OPTION VALUE="200">embraced</OPTION>
+</SELECT>
+</TD></TR>
+<TR><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Min. concept occurrence</TD><TD>
+<SELECT NAME="occurrence">
+<OPTION VALUE="1" SELECTED="true">1</OPTION>
+<OPTION VALUE="2">2</OPTION>
+<OPTION VALUE="3">3</OPTION>
+<OPTION VALUE="4">4</OPTION>
+<OPTION VALUE="5">5</OPTION>
+</SELECT>
+</TD></TR>
+<!--
+<TR><TD>XML schema</TD><TD><INPUT NAME="xsd" SIZE="10"/></TD></TR>
+-->
+<TR><TD COLSPAN="2"><INPUT TYPE="button" VALUE="Translate" ONCLICK="javascript: translate()"/></TD></TR>
+</TABLE>
+</FORM>
+</CENTER>
+</BODY>
+</HTML>
+

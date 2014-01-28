@@ -1,0 +1,1870 @@
+<?xml version="1.0"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="null.code.set">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="NI" />
+      <xs:enumeration value="NA" />
+      <xs:enumeration value="UNK" />
+      <xs:enumeration value="NASK" />
+      <xs:enumeration value="ASKU" />
+      <xs:enumeration value="NAV" />
+      <xs:enumeration value="OTH" />
+      <xs:enumeration value="PINF" />
+      <xs:enumeration value="NINF" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="boolean.code.set">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="true" />
+      <xs:enumeration value="false" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Character">
+    <xs:restriction base="CDATA" />
+  </xs:simpleType>
+  <xs:simpleType name="Length">
+    <xs:restriction base="CDATA" />
+  </xs:simpleType>
+  <xs:simpleType name="MultiLength">
+    <xs:restriction base="CDATA" />
+  </xs:simpleType>
+  <xs:simpleType name="Number">
+    <xs:restriction base="CDATA" />
+  </xs:simpleType>
+  <xs:simpleType name="Pixels">
+    <xs:restriction base="CDATA" />
+  </xs:simpleType>
+  <xs:simpleType name="Text">
+    <xs:restriction base="CDATA" />
+  </xs:simpleType>
+  <xs:simpleType name="TFrame">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="void" />
+      <xs:enumeration value="above" />
+      <xs:enumeration value="below" />
+      <xs:enumeration value="hsides" />
+      <xs:enumeration value="lhs" />
+      <xs:enumeration value="rhs" />
+      <xs:enumeration value="vsides" />
+      <xs:enumeration value="box" />
+      <xs:enumeration value="border" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="TRules">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="none" />
+      <xs:enumeration value="groups" />
+      <xs:enumeration value="rows" />
+      <xs:enumeration value="cols" />
+      <xs:enumeration value="all" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Scope">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="row" />
+      <xs:enumeration value="col" />
+      <xs:enumeration value="rowgroup" />
+      <xs:enumeration value="colgroup" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:group name="CD-cont.model">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" ref="TRANSLTN" />
+      <xs:element minOccurs="0" ref="ORIGTXT" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" ref="MODIFIER" />
+      <xs:element minOccurs="0" ref="NOTE" />
+      <xs:element minOccurs="0" ref="CONFID" />
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="CR-cont.model">
+    <xs:sequence>
+      <xs:element minOccurs="0" ref="NAME" />
+      <xs:group ref="CD-cont.model" />
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="CS-cont.model">
+    <xs:sequence>
+      <xs:element minOccurs="0" ref="NOTE" />
+      <xs:element minOccurs="0" ref="CONFID" />
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="CV-cont.model">
+    <xs:sequence>
+      <xs:element minOccurs="0" ref="ORIGTXT" />
+      <xs:element minOccurs="0" ref="NOTE" />
+      <xs:element minOccurs="0" ref="CONFID" />
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="CE-cont.model">
+    <xs:sequence>
+      <xs:element minOccurs="0" ref="ORIGTXT" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" ref="TRANSLTN" />
+      <xs:element minOccurs="0" ref="NOTE" />
+      <xs:element minOccurs="0" ref="CONFID" />
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="II-cont.model">
+    <xs:sequence>
+      <xs:element minOccurs="0" ref="TYPE" />
+      <xs:element minOccurs="0" ref="NOTE" />
+      <xs:element minOccurs="0" ref="CONFID" />
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="TEL-cont.model">
+    <xs:sequence>
+      <xs:element minOccurs="0" ref="NOTE" />
+      <xs:element minOccurs="0" ref="CONFID" />
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="ADXP-cont.model">
+    <xs:sequence>
+      <xs:element minOccurs="0" ref="NOTE" />
+      <xs:element minOccurs="0" ref="CONFID" />
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="AD-cont.model">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="LIT" />
+        <xs:element ref="DEL" />
+        <xs:element ref="CNT" />
+        <xs:element ref="STA" />
+        <xs:element ref="CTY" />
+        <xs:element ref="ZIP" />
+        <xs:element ref="STR" />
+        <xs:element ref="HNR" />
+        <xs:element ref="DIR" />
+        <xs:element ref="ADL" />
+        <xs:element ref="POB" />
+      </xs:choice>
+      <xs:element minOccurs="0" ref="NOTE" />
+      <xs:element minOccurs="0" ref="CONFID" />
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="PNXP-cont.model">
+    <xs:sequence>
+      <xs:element minOccurs="0" ref="NOTE" />
+      <xs:element minOccurs="0" ref="CONFID" />
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="PN-cont.model">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="GIV" />
+        <xs:element ref="MID" />
+        <xs:element ref="FAM" />
+        <xs:element ref="PFX" />
+        <xs:element ref="SFX" />
+        <xs:element ref="DEL" />
+      </xs:choice>
+      <xs:element minOccurs="0" ref="NOTE" />
+      <xs:element minOccurs="0" ref="CONFID" />
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="ON-cont.model">
+    <xs:sequence>
+      <xs:element minOccurs="0" ref="NOTE" />
+      <xs:element minOccurs="0" ref="CONFID" />
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="INT-cont.model">
+    <xs:sequence>
+      <xs:element minOccurs="0" ref="NOTE" />
+      <xs:element minOccurs="0" ref="CONFID" />
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="TS-cont.model">
+    <xs:sequence>
+      <xs:element minOccurs="0" ref="NOTE" />
+      <xs:element minOccurs="0" ref="CONFID" />
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="IVL_TS-cont.model">
+    <xs:sequence>
+      <xs:element minOccurs="0" ref="NOTE" />
+      <xs:element minOccurs="0" ref="CONFID" />
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="GTS-cont.model">
+    <xs:sequence>
+      <xs:element minOccurs="0" ref="NOTE" />
+      <xs:element minOccurs="0" ref="CONFID" />
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="entries">
+    <xs:choice>
+      <xs:element ref="content" />
+      <xs:element ref="link" />
+      <xs:element ref="coded_entry" />
+      <xs:element ref="observation_media" />
+      <xs:element ref="local_markup" />
+    </xs:choice>
+  </xs:group>
+  <xs:group name="structures">
+    <xs:choice>
+      <xs:element ref="paragraph" />
+      <xs:element ref="list" />
+      <xs:element ref="table" />
+    </xs:choice>
+  </xs:group>
+  <xs:attributeGroup name="ED-attrib.list">
+    <xs:attribute name="T" default="ED">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="ST" />
+          <xs:enumeration value="ED" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="NULL" type="null.code.set" />
+    <xs:attribute name="ENC" default="TXT">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="B64" />
+          <xs:enumeration value="TXT" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="MT" type="xs:string" default="text/plain" />
+    <xs:attribute name="MT-T" type="xs:NMTOKEN" fixed="CS" />
+    <xs:attribute name="MT-DOMAIN" type="xs:NMTOKEN" fixed="2.16.840.1.113883.6.10" />
+    <xs:attribute name="MT-HL7_NAME" type="xs:string" fixed="type" />
+    <xs:attribute name="xml:lang" type="xs:NMTOKEN" />
+    <xs:attribute name="xml:lang-T" type="xs:NMTOKEN" fixed="CS" />
+    <xs:attribute name="xml:lang-HL7_NAME" type="xs:string" fixed="language" />
+    <xs:attribute name="COMPN">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="DF" />
+          <xs:enumeration value="GZ" />
+          <xs:enumeration value="ZL" />
+          <xs:enumeration value="Z" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="COMPN-T" type="xs:NMTOKEN" fixed="CS" />
+    <xs:attribute name="COMPN-HL7_NAME" type="xs:string" fixed="compression" />
+    <xs:attribute name="COMPN-DOMAIN" type="xs:NMTOKEN" fixed="2.16.840.1.113883.5.1009" />
+    <xs:attribute name="IC" type="xs:string" />
+    <xs:attribute name="IC-T" type="xs:NMTOKEN" fixed="BIN" />
+    <xs:attribute name="IC-HL7_NAME" type="xs:string" fixed="integrityCheck" />
+    <xs:attribute name="VT" type="xs:string" />
+    <xs:attribute name="VT-T" type="xs:NMTOKEN" fixed="IVL_TS" />
+    <xs:attribute name="VT-HL7_NAME" type="xs:string" fixed="validTime" />
+    <xs:attribute name="PROB" type="xs:string" />
+    <xs:attribute name="PROB-T" type="xs:NMTOKEN" fixed="REAL" />
+    <xs:attribute name="PROB-HL7_NAME" type="xs:string" fixed="probability" />
+  </xs:attributeGroup>
+  <xs:attributeGroup name="CD-attrib.list">
+    <xs:attribute name="T" default="CD">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="CD" />
+          <xs:enumeration value="CE" />
+          <xs:enumeration value="CV" />
+          <xs:enumeration value="CS" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="NULL" type="null.code.set" />
+    <xs:attribute name="V" type="xs:string" />
+    <xs:attribute name="V-T" type="xs:NMTOKEN" fixed="ST" />
+    <xs:attribute name="V-HL7_NAME" type="xs:string" fixed="code" />
+    <xs:attribute name="DN" type="xs:string" />
+    <xs:attribute name="DN-T" type="xs:NMTOKEN" fixed="ST" />
+    <xs:attribute name="DN-HL7_NAME" type="xs:string" fixed="displayName" />
+    <xs:attribute name="S" type="xs:string" />
+    <xs:attribute name="S-T" type="xs:NMTOKEN" fixed="OID" />
+    <xs:attribute name="S-HL7_NAME" type="xs:string" fixed="codeSystem" />
+    <xs:attribute name="SN" type="xs:string" />
+    <xs:attribute name="SN-T" type="xs:NMTOKEN" fixed="ST" />
+    <xs:attribute name="SN-HL7_NAME" type="xs:string" fixed="codeSystemName" />
+    <xs:attribute name="SV" type="xs:string" />
+    <xs:attribute name="SV-T" type="xs:NMTOKEN" fixed="ST" />
+    <xs:attribute name="SV-HL7_NAME" type="xs:string" fixed="codeSystemVersion" />
+    <xs:attribute name="ORIGTXT" type="xs:IDREF" />
+    <xs:attribute name="ORIGTXT-T" type="xs:NMTOKEN" fixed="ST" />
+    <xs:attribute name="ORIGTXT-HL7_NAME" type="xs:string" fixed="originalText" />
+    <xs:attribute name="VT" type="xs:string" />
+    <xs:attribute name="VT-T" type="xs:NMTOKEN" fixed="IVL_TS" />
+    <xs:attribute name="VT-HL7_NAME" type="xs:string" fixed="validTime" />
+    <xs:attribute name="PROB" type="xs:string" />
+    <xs:attribute name="PROB-T" type="xs:NMTOKEN" fixed="REAL" />
+    <xs:attribute name="PROB-HL7_NAME" type="xs:string" fixed="probability" />
+  </xs:attributeGroup>
+  <xs:attributeGroup name="CR-attrib.list">
+    <xs:attribute name="T" type="xs:NMTOKEN" fixed="CR" />
+    <xs:attribute name="NULL" type="null.code.set" />
+    <xs:attribute name="V" type="xs:string" />
+    <xs:attribute name="V-T" type="xs:NMTOKEN" fixed="ST" />
+    <xs:attribute name="V-HL7_NAME" type="xs:string" fixed="code" />
+    <xs:attribute name="DN" type="xs:string" />
+    <xs:attribute name="DN-T" type="xs:NMTOKEN" fixed="ST" />
+    <xs:attribute name="DN-HL7_NAME" type="xs:string" fixed="displayName" />
+    <xs:attribute name="ORIGTXT" type="xs:IDREF" />
+    <xs:attribute name="ORIGTXT-T" type="xs:NMTOKEN" fixed="ST" />
+    <xs:attribute name="ORIGTXT-HL7_NAME" type="xs:string" fixed="originalText" />
+    <xs:attribute name="INV" type="boolean.code.set" default="false" />
+    <xs:attribute name="INV-T" type="xs:NMTOKEN" fixed="BL" />
+    <xs:attribute name="INV-HL7_NAME" type="xs:string" fixed="inverted" />
+    <xs:attribute name="VT" type="xs:string" />
+    <xs:attribute name="VT-T" type="xs:NMTOKEN" fixed="IVL_TS" />
+    <xs:attribute name="VT-HL7_NAME" type="xs:string" fixed="validTime" />
+    <xs:attribute name="PROB" type="xs:string" />
+    <xs:attribute name="PROB-T" type="xs:NMTOKEN" fixed="REAL" />
+    <xs:attribute name="PROB-HL7_NAME" type="xs:string" fixed="probability" />
+  </xs:attributeGroup>
+  <xs:attributeGroup name="CV-attrib.list">
+    <xs:attribute name="T" default="CV">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="CS" />
+          <xs:enumeration value="CV" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="NULL" type="null.code.set" />
+    <xs:attribute name="V" type="xs:string" />
+    <xs:attribute name="V-T" type="xs:NMTOKEN" fixed="ST" />
+    <xs:attribute name="V-HL7_NAME" type="xs:string" fixed="code" />
+    <xs:attribute name="DN" type="xs:string" />
+    <xs:attribute name="DN-T" type="xs:NMTOKEN" fixed="ST" />
+    <xs:attribute name="DN-HL7_NAME" type="xs:string" fixed="displayName" />
+    <xs:attribute name="S" type="xs:string" />
+    <xs:attribute name="S-T" type="xs:NMTOKEN" fixed="OID" />
+    <xs:attribute name="S-HL7_NAME" type="xs:string" fixed="codeSystem" />
+    <xs:attribute name="SN" type="xs:string" />
+    <xs:attribute name="SN-T" type="xs:NMTOKEN" fixed="ST" />
+    <xs:attribute name="SN-HL7_NAME" type="xs:string" fixed="codeSystemName" />
+    <xs:attribute name="SV" type="xs:string" />
+    <xs:attribute name="SV-T" type="xs:NMTOKEN" fixed="OID" />
+    <xs:attribute name="SV-HL7_NAME" type="xs:string" fixed="codeSystemVersion" />
+    <xs:attribute name="ORIGTXT" type="xs:IDREF" />
+    <xs:attribute name="ORIGTXT-T" type="xs:NMTOKEN" fixed="ST" />
+    <xs:attribute name="ORIGTXT-HL7_NAME" type="xs:string" fixed="originalText" />
+    <xs:attribute name="VT" type="xs:string" />
+    <xs:attribute name="VT-T" type="xs:NMTOKEN" fixed="IVL_TS" />
+    <xs:attribute name="VT-HL7_NAME" type="xs:string" fixed="validTime" />
+    <xs:attribute name="PROB" type="xs:string" />
+    <xs:attribute name="PROB-T" type="xs:NMTOKEN" fixed="REAL" />
+    <xs:attribute name="PROB-HL7_NAME" type="xs:string" fixed="probability" />
+  </xs:attributeGroup>
+  <xs:attributeGroup name="CE-attrib.list">
+    <xs:attribute name="T" default="CE">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="CS" />
+          <xs:enumeration value="CV" />
+          <xs:enumeration value="CE" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="NULL" type="null.code.set" />
+    <xs:attribute name="V" type="xs:string" />
+    <xs:attribute name="V-T" type="xs:NMTOKEN" fixed="ST" />
+    <xs:attribute name="V-HL7_NAME" type="xs:string" fixed="code" />
+    <xs:attribute name="DN" type="xs:string" />
+    <xs:attribute name="DN-T" type="xs:NMTOKEN" fixed="ST" />
+    <xs:attribute name="DN-HL7_NAME" type="xs:string" fixed="displayName" />
+    <xs:attribute name="S" type="xs:string" />
+    <xs:attribute name="S-T" type="xs:NMTOKEN" fixed="OID" />
+    <xs:attribute name="S-HL7_NAME" type="xs:string" fixed="codeSystem" />
+    <xs:attribute name="SN" type="xs:string" />
+    <xs:attribute name="SN-T" type="xs:NMTOKEN" fixed="ST" />
+    <xs:attribute name="SN-HL7_NAME" type="xs:string" fixed="codeSystemName" />
+    <xs:attribute name="SV" type="xs:string" />
+    <xs:attribute name="SV-T" type="xs:NMTOKEN" fixed="OID" />
+    <xs:attribute name="SV-HL7_NAME" type="xs:string" fixed="codeSystemVersion" />
+    <xs:attribute name="ORIGTXT" type="xs:IDREF" />
+    <xs:attribute name="ORIGTXT-T" type="xs:NMTOKEN" fixed="ST" />
+    <xs:attribute name="ORIGTXT-HL7_NAME" type="xs:string" fixed="originalText" />
+    <xs:attribute name="VT" type="xs:string" />
+    <xs:attribute name="VT-T" type="xs:NMTOKEN" fixed="IVL_TS" />
+    <xs:attribute name="VT-HL7_NAME" type="xs:string" fixed="validTime" />
+    <xs:attribute name="PROB" type="xs:string" />
+    <xs:attribute name="PROB-T" type="xs:NMTOKEN" fixed="REAL" />
+    <xs:attribute name="PROB-HL7_NAME" type="xs:string" fixed="probability" />
+  </xs:attributeGroup>
+  <xs:attributeGroup name="II-attrib.list">
+    <xs:attribute name="T" type="xs:NMTOKEN" fixed="II" />
+    <xs:attribute name="NULL" type="null.code.set" />
+    <xs:attribute name="EX" type="xs:string" />
+    <xs:attribute name="EX-T" type="xs:NMTOKEN" fixed="ST" />
+    <xs:attribute name="EX-HL7_NAME" type="xs:string" fixed="extension" />
+    <xs:attribute name="RT" type="xs:string" />
+    <xs:attribute name="RT-T" type="xs:NMTOKEN" fixed="OID" />
+    <xs:attribute name="RT-HL7_NAME" type="xs:string" fixed="root" />
+    <xs:attribute name="AAN" type="xs:string" />
+    <xs:attribute name="AAN-T" type="xs:NMTOKEN" fixed="ST" />
+    <xs:attribute name="AAN-HL7_NAME" type="xs:string" fixed="assigningAuthorityName" />
+    <xs:attribute name="VT" type="xs:string" />
+    <xs:attribute name="VT-T" type="xs:NMTOKEN" fixed="IVL_TS" />
+    <xs:attribute name="VT-HL7_NAME" type="xs:string" fixed="validTime" />
+    <xs:attribute name="PROB" type="xs:string" />
+    <xs:attribute name="PROB-T" type="xs:NMTOKEN" fixed="REAL" />
+    <xs:attribute name="PROB-HL7_NAME" type="xs:string" fixed="probability" />
+  </xs:attributeGroup>
+  <xs:attributeGroup name="TEL-attrib.list">
+    <xs:attribute name="T" type="xs:NMTOKEN" fixed="TEL" />
+    <xs:attribute name="NULL" type="null.code.set" />
+    <xs:attribute name="V" type="xs:string" />
+    <xs:attribute name="V-T" type="xs:NMTOKEN" fixed="URL" />
+    <xs:attribute name="V-HL7_NAME" type="xs:string" fixed="value" />
+    <xs:attribute name="USE" type="xs:NMTOKENS" />
+    <xs:attribute name="USE-T" type="xs:NMTOKEN" fixed="SET_CS" />
+    <xs:attribute name="USE-DOMAIN" type="xs:string" fixed="2.16.840.1.113883.5.1011" />
+    <xs:attribute name="USE-HL7_NAME" type="xs:string" fixed="use" />
+    <xs:attribute name="VT" type="xs:string" />
+    <xs:attribute name="VT-T" type="xs:NMTOKEN" fixed="GTS" />
+    <xs:attribute name="VT-HL7_NAME" type="xs:string" fixed="validTime" />
+    <xs:attribute name="PROB" type="xs:string" />
+    <xs:attribute name="PROB-T" type="xs:NMTOKEN" fixed="REAL" />
+    <xs:attribute name="PROB-HL7_NAME" type="xs:string" fixed="probability" />
+  </xs:attributeGroup>
+  <xs:attributeGroup name="ADXP-attrib.list">
+    <xs:attribute name="T" type="xs:NMTOKEN" fixed="ADXP" />
+    <xs:attribute name="NULL" type="null.code.set" />
+    <xs:attribute name="V" type="xs:string" />
+    <xs:attribute name="V-T" type="xs:NMTOKEN" fixed="ST" />
+    <xs:attribute name="V-HL7_NAME" type="xs:string" fixed="value" />
+    <xs:attribute name="VT" type="xs:string" />
+    <xs:attribute name="VT-T" type="xs:NMTOKEN" fixed="IVL_TS" />
+    <xs:attribute name="VT-HL7_NAME" type="xs:string" fixed="validTime" />
+    <xs:attribute name="PROB" type="xs:string" />
+    <xs:attribute name="PROB-T" type="xs:NMTOKEN" fixed="REAL" />
+    <xs:attribute name="PROB-HL7_NAME" type="xs:string" fixed="probability" />
+  </xs:attributeGroup>
+  <xs:attributeGroup name="AD-attrib.list">
+    <xs:attribute name="T" type="xs:NMTOKEN" fixed="AD" />
+    <xs:attribute name="NULL" type="null.code.set" />
+    <xs:attribute name="V" type="xs:string" />
+    <xs:attribute name="V-T" type="xs:NMTOKEN" fixed="ST" />
+    <xs:attribute name="V-HL7_NAME" type="xs:string" fixed="formated" />
+    <xs:attribute name="USE" type="xs:NMTOKENS" />
+    <xs:attribute name="USE-T" type="xs:NMTOKEN" fixed="SET_CS" />
+    <xs:attribute name="USE-DOMAIN" type="xs:string" fixed="2.16.840.1.113883.5.1012" />
+    <xs:attribute name="USE-HL7_NAME" type="xs:string" fixed="use" />
+    <xs:attribute name="VT" type="xs:string" />
+    <xs:attribute name="VT-T" type="xs:NMTOKEN" fixed="GTS" />
+    <xs:attribute name="VT-HL7_NAME" type="xs:string" fixed="validTime" />
+    <xs:attribute name="PROB" type="xs:string" />
+    <xs:attribute name="PROB-T" type="xs:NMTOKEN" fixed="REAL" />
+    <xs:attribute name="PROB-HL7_NAME" type="xs:string" fixed="probability" />
+  </xs:attributeGroup>
+  <xs:attributeGroup name="PNXP-attrib.list">
+    <xs:attribute name="T" type="xs:NMTOKEN" fixed="PNXP" />
+    <xs:attribute name="NULL" type="null.code.set" />
+    <xs:attribute name="V" type="xs:string" />
+    <xs:attribute name="V-T" type="xs:NMTOKEN" fixed="ST" />
+    <xs:attribute name="V-HL7_NAME" type="xs:string" fixed="value" />
+    <xs:attribute name="QUAL" type="xs:NMTOKENS" />
+    <xs:attribute name="QUAL-T" type="xs:NMTOKEN" fixed="SET_CS" />
+    <xs:attribute name="QUAL-DOMAIN" type="xs:string" fixed="2.16.840.1.113883.5.1014" />
+    <xs:attribute name="QUAL-HL7_NAME" type="xs:string" fixed="qualifier" />
+    <xs:attribute name="VT" type="xs:string" />
+    <xs:attribute name="VT-T" type="xs:NMTOKEN" fixed="IVL_TS" />
+    <xs:attribute name="VT-HL7_NAME" type="xs:string" fixed="validTime" />
+    <xs:attribute name="PROB" type="xs:string" />
+    <xs:attribute name="PROB-T" type="xs:NMTOKEN" fixed="REAL" />
+    <xs:attribute name="PROB-HL7_NAME" type="xs:string" fixed="probability" />
+  </xs:attributeGroup>
+  <xs:attributeGroup name="PN-attrib.list">
+    <xs:attribute name="T" type="xs:NMTOKEN" fixed="PN" />
+    <xs:attribute name="NULL" type="null.code.set" />
+    <xs:attribute name="V" type="xs:string" />
+    <xs:attribute name="V-T" type="xs:NMTOKEN" fixed="ST" />
+    <xs:attribute name="V-HL7_NAME" type="xs:string" fixed="formated" />
+    <xs:attribute name="VT" type="xs:string" />
+    <xs:attribute name="VT-T" type="xs:NMTOKEN" fixed="IVL_TS" />
+    <xs:attribute name="VT-HL7_NAME" type="xs:string" fixed="validTime" />
+    <xs:attribute name="PROB" type="xs:string" />
+    <xs:attribute name="PROB-T" type="xs:NMTOKEN" fixed="REAL" />
+    <xs:attribute name="PROB-HL7_NAME" type="xs:string" fixed="probability" />
+  </xs:attributeGroup>
+  <xs:attributeGroup name="ON-attrib.list">
+    <xs:attribute name="T" type="xs:NMTOKEN" fixed="ON" />
+    <xs:attribute name="NULL" type="null.code.set" />
+    <xs:attribute name="V" type="xs:string" />
+    <xs:attribute name="V-T" type="xs:NMTOKEN" fixed="ST" />
+    <xs:attribute name="V-HL7_NAME" type="xs:string" fixed="value" />
+    <xs:attribute name="TYPE">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="L" />
+          <xs:enumeration value="A" />
+          <xs:enumeration value="ST" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="TYPE-T" type="xs:NMTOKEN" fixed="CS" />
+    <xs:attribute name="TYPE-DOMAIN" type="xs:string" fixed="2.16.840.1.113883.5.1015" />
+    <xs:attribute name="TYPE-HL7_NAME" type="xs:string" fixed="type" />
+    <xs:attribute name="VT" type="xs:string" />
+    <xs:attribute name="VT-T" type="xs:NMTOKEN" fixed="IVL_TS" />
+    <xs:attribute name="VT-HL7_NAME" type="xs:string" fixed="validTime" />
+    <xs:attribute name="PROB" type="xs:string" />
+    <xs:attribute name="PROB-T" type="xs:NMTOKEN" fixed="REAL" />
+    <xs:attribute name="PROB-HL7_NAME" type="xs:string" fixed="probability" />
+  </xs:attributeGroup>
+  <xs:attributeGroup name="INT-attrib.list">
+    <xs:attribute name="T" type="xs:NMTOKEN" fixed="INT" />
+    <xs:attribute name="NULL" type="null.code.set" />
+    <xs:attribute name="V" type="xs:string" />
+    <xs:attribute name="V-T" type="xs:NMTOKEN" fixed="ST" />
+    <xs:attribute name="V-HL7_NAME" type="xs:string" fixed="value" />
+    <xs:attribute name="VT" type="xs:string" />
+    <xs:attribute name="VT-T" type="xs:NMTOKEN" fixed="IVL_TS" />
+    <xs:attribute name="VT-HL7_NAME" type="xs:string" fixed="validTime" />
+    <xs:attribute name="PROB" type="xs:string" />
+    <xs:attribute name="PROB-T" type="xs:NMTOKEN" fixed="REAL" />
+    <xs:attribute name="PROB-HL7_NAME" type="xs:string" fixed="probability" />
+  </xs:attributeGroup>
+  <xs:attributeGroup name="TS-attrib.list">
+    <xs:attribute name="T" type="xs:NMTOKEN" fixed="TS" />
+    <xs:attribute name="NULL" type="null.code.set" />
+    <xs:attribute name="V" type="xs:string" />
+    <xs:attribute name="V-T" type="xs:NMTOKEN" fixed="ST" />
+    <xs:attribute name="V-HL7_NAME" type="xs:string" fixed="value" />
+    <xs:attribute name="VT" type="xs:string" />
+    <xs:attribute name="VT-T" type="xs:NMTOKEN" fixed="IVL_TS" />
+    <xs:attribute name="VT-HL7_NAME" type="xs:string" fixed="validTime" />
+    <xs:attribute name="PROB" type="xs:string" />
+    <xs:attribute name="PROB-T" type="xs:NMTOKEN" fixed="REAL" />
+    <xs:attribute name="PROB-HL7_NAME" type="xs:string" fixed="probability" />
+  </xs:attributeGroup>
+  <xs:attributeGroup name="IVL_TS-attrib.list">
+    <xs:attribute name="T" type="xs:NMTOKEN" fixed="IVL_TS" />
+    <xs:attribute name="NULL" type="null.code.set" />
+    <xs:attribute name="V" type="xs:string" />
+    <xs:attribute name="V-T" type="xs:NMTOKEN" fixed="TS" />
+    <xs:attribute name="V-HL7_NAME" type="xs:string" fixed="value" />
+    <xs:attribute name="VT" type="xs:string" />
+    <xs:attribute name="VT-T" type="xs:NMTOKEN" fixed="IVL_TS" />
+    <xs:attribute name="VT-HL7_NAME" type="xs:string" fixed="validTime" />
+    <xs:attribute name="PROB" type="xs:string" />
+    <xs:attribute name="PROB-T" type="xs:NMTOKEN" fixed="REAL" />
+    <xs:attribute name="PROB-HL7_NAME" type="xs:string" fixed="probability" />
+  </xs:attributeGroup>
+  <xs:attributeGroup name="GTS-attrib.list">
+    <xs:attribute name="T" type="xs:NMTOKEN" fixed="GTS" />
+    <xs:attribute name="NULL" type="null.code.set" />
+    <xs:attribute name="V" type="xs:string" />
+    <xs:attribute name="V-T" type="xs:NMTOKEN" fixed="GTS" />
+    <xs:attribute name="V-HL7_NAME" type="xs:string" fixed="value" />
+    <xs:attribute name="VT" type="xs:string" />
+    <xs:attribute name="VT-T" type="xs:NMTOKEN" fixed="IVL_TS" />
+    <xs:attribute name="VT-HL7_NAME" type="xs:string" fixed="validTime" />
+    <xs:attribute name="PROB" type="xs:string" />
+    <xs:attribute name="PROB-T" type="xs:NMTOKEN" fixed="REAL" />
+    <xs:attribute name="PROB-HL7_NAME" type="xs:string" fixed="probability" />
+  </xs:attributeGroup>
+  <xs:attributeGroup name="common_atts">
+    <xs:attribute name="ID" type="xs:ID" />
+  </xs:attributeGroup>
+  <xs:attributeGroup name="body_atts">
+    <xs:attributeGroup ref="common_atts" />
+    <xs:attribute name="originator" type="xs:IDREFS" />
+    <xs:attribute name="confidentiality" type="xs:IDREFS" />
+    <xs:attribute name="xml:lang" type="xs:NMTOKEN" />
+  </xs:attributeGroup>
+  <xs:attributeGroup name="cellhalign">
+    <xs:attribute name="align">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="left" />
+          <xs:enumeration value="center" />
+          <xs:enumeration value="right" />
+          <xs:enumeration value="justify" />
+          <xs:enumeration value="char" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="char" type="Character" />
+    <xs:attribute name="charoff" type="Length" />
+  </xs:attributeGroup>
+  <xs:attributeGroup name="cellvalign">
+    <xs:attribute name="valign">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="top" />
+          <xs:enumeration value="middle" />
+          <xs:enumeration value="bottom" />
+          <xs:enumeration value="baseline" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:element name="NOTE">
+    <xs:complexType>
+      <xs:group ref="CE-cont.model" />
+      <xs:attributeGroup ref="CE-attrib.list" />
+      <xs:attribute name="HL7_NAME" type="xs:string" fixed="note" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CONFID">
+    <xs:complexType>
+      <xs:group ref="CV-cont.model" />
+      <xs:attributeGroup ref="CV-attrib.list" />
+      <xs:attribute name="HL7_NAME" type="xs:string" fixed="confidence" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="REF">
+    <xs:complexType>
+      <xs:group ref="TEL-cont.model" />
+      <xs:attributeGroup ref="TEL-attrib.list" />
+      <xs:attribute name="HL7_NAME" type="xs:string" fixed="reference" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="THUMBNAIL">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="REF" />
+        <xs:element ref="THUMBNAIL" />
+        <xs:element ref="NOTE" />
+        <xs:element ref="CONFID" />
+      </xs:choice>
+      <xs:attributeGroup ref="ED-attrib.list" />
+      <xs:attribute name="HL7_NAME" type="xs:string" fixed="thumbnail" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ORIGTXT">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="REF" />
+        <xs:element ref="THUMBNAIL" />
+        <xs:element ref="NOTE" />
+        <xs:element ref="CONFID" />
+      </xs:choice>
+      <xs:attributeGroup ref="ED-attrib.list" />
+      <xs:attribute name="HL7_NAME" type="xs:string" fixed="originalText" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="MODIFIER">
+    <xs:complexType>
+      <xs:group ref="CR-cont.model" />
+      <xs:attributeGroup ref="CR-attrib.list" />
+      <xs:attribute name="HL7_NAME" type="xs:string" fixed="modifier" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TRANSLTN">
+    <xs:complexType>
+      <xs:group ref="CD-cont.model" />
+      <xs:attributeGroup ref="CD-attrib.list" />
+      <xs:attribute name="HL7_NAME" type="xs:string" fixed="translation" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NAME">
+    <xs:complexType>
+      <xs:group ref="CV-cont.model" />
+      <xs:attributeGroup ref="CV-attrib.list" />
+      <xs:attribute name="HL7_NAME" type="xs:string" fixed="name" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TYPE">
+    <xs:complexType>
+      <xs:group ref="CV-cont.model" />
+      <xs:attributeGroup ref="CV-attrib.list" />
+      <xs:attribute name="HL7_NAME" type="xs:string" fixed="type" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LIT">
+    <xs:complexType>
+      <xs:group ref="ADXP-cont.model" />
+      <xs:attributeGroup ref="ADXP-attrib.list" />
+      <xs:attribute name="HL7_NAME" type="xs:string" fixed="literal" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DEL">
+    <xs:complexType>
+      <xs:group ref="ADXP-cont.model" />
+      <xs:attributeGroup ref="ADXP-attrib.list" />
+      <xs:attribute name="HL7_NAME" type="xs:string" fixed="delimiter" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CNT">
+    <xs:complexType>
+      <xs:group ref="ADXP-cont.model" />
+      <xs:attributeGroup ref="ADXP-attrib.list" />
+      <xs:attribute name="HL7_NAME" type="xs:string" fixed="country" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CTY">
+    <xs:complexType>
+      <xs:group ref="ADXP-cont.model" />
+      <xs:attributeGroup ref="ADXP-attrib.list" />
+      <xs:attribute name="HL7_NAME" type="xs:string" fixed="city" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="STA">
+    <xs:complexType>
+      <xs:group ref="ADXP-cont.model" />
+      <xs:attributeGroup ref="ADXP-attrib.list" />
+      <xs:attribute name="HL7_NAME" type="xs:string" fixed="state" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ZIP">
+    <xs:complexType>
+      <xs:group ref="ADXP-cont.model" />
+      <xs:attributeGroup ref="ADXP-attrib.list" />
+      <xs:attribute name="HL7_NAME" type="xs:string" fixed="postal code" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="STR">
+    <xs:complexType>
+      <xs:group ref="ADXP-cont.model" />
+      <xs:attributeGroup ref="ADXP-attrib.list" />
+      <xs:attribute name="HL7_NAME" type="xs:string" fixed="street name" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="HNR">
+    <xs:complexType>
+      <xs:group ref="ADXP-cont.model" />
+      <xs:attributeGroup ref="ADXP-attrib.list" />
+      <xs:attribute name="HL7_NAME" type="xs:string" fixed="house number" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DIR">
+    <xs:complexType>
+      <xs:group ref="ADXP-cont.model" />
+      <xs:attributeGroup ref="ADXP-attrib.list" />
+      <xs:attribute name="HL7_NAME" type="xs:string" fixed="direction" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ADL">
+    <xs:complexType>
+      <xs:group ref="ADXP-cont.model" />
+      <xs:attributeGroup ref="ADXP-attrib.list" />
+      <xs:attribute name="HL7_NAME" type="xs:string" fixed="address locator" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="POB">
+    <xs:complexType>
+      <xs:group ref="ADXP-cont.model" />
+      <xs:attributeGroup ref="ADXP-attrib.list" />
+      <xs:attribute name="HL7_NAME" type="xs:string" fixed="post office box" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="FAM">
+    <xs:complexType>
+      <xs:group ref="PNXP-cont.model" />
+      <xs:attributeGroup ref="PNXP-attrib.list" />
+      <xs:attribute name="HL7_NAME" type="xs:string" fixed="family" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GIV">
+    <xs:complexType>
+      <xs:group ref="PNXP-cont.model" />
+      <xs:attributeGroup ref="PNXP-attrib.list" />
+      <xs:attribute name="HL7_NAME" type="xs:string" fixed="given" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="MID">
+    <xs:complexType>
+      <xs:group ref="PNXP-cont.model" />
+      <xs:attributeGroup ref="PNXP-attrib.list" />
+      <xs:attribute name="HL7_NAME" type="xs:string" fixed="middle" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PFX">
+    <xs:complexType>
+      <xs:group ref="PNXP-cont.model" />
+      <xs:attributeGroup ref="PNXP-attrib.list" />
+      <xs:attribute name="HL7_NAME" type="xs:string" fixed="prefix" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SFX">
+    <xs:complexType>
+      <xs:group ref="PNXP-cont.model" />
+      <xs:attributeGroup ref="PNXP-attrib.list" />
+      <xs:attribute name="HL7_NAME" type="xs:string" fixed="suffix" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="clinical_document_header">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="id" />
+        <xs:element minOccurs="0" ref="set_id" />
+        <xs:element minOccurs="0" ref="version_nbr" />
+        <xs:element ref="document_type_cd" />
+        <xs:element minOccurs="0" ref="service_tmr" />
+        <xs:element ref="origination_dttm" />
+        <xs:element minOccurs="0" ref="copy_dttm" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="confidentiality_cd" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="document_relationship" />
+        <xs:element minOccurs="0" ref="fulfills_order" />
+        <xs:element minOccurs="0" ref="patient_encounter" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="authenticator" />
+        <xs:element minOccurs="0" ref="legal_authenticator" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="intended_recipient" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="originator" />
+        <xs:element minOccurs="0" ref="originating_organization" />
+        <xs:element minOccurs="0" ref="transcriptionist" />
+        <xs:element maxOccurs="unbounded" ref="provider" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="service_actor" />
+        <xs:element ref="patient" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="originating_device" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="service_target" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="local_header" />
+      </xs:sequence>
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="document_service_as_clinical_document_header" />
+      <xs:attribute name="T" type="xs:string" fixed="service" />
+      <xs:attribute name="RIM-VERSION" type="xs:string" fixed="0.98" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="id">
+    <xs:complexType>
+      <xs:group ref="II-cont.model" />
+      <xs:attributeGroup ref="II-attrib.list" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="id" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="set_id">
+    <xs:complexType>
+      <xs:group ref="II-cont.model" />
+      <xs:attributeGroup ref="II-attrib.list" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="set_id" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="version_nbr">
+    <xs:complexType>
+      <xs:group ref="INT-cont.model" />
+      <xs:attributeGroup ref="INT-attrib.list" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="version_nbr" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="document_type_cd">
+    <xs:complexType>
+      <xs:group ref="CE-cont.model" />
+      <xs:attributeGroup ref="CE-attrib.list" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="service_cd" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="service_tmr">
+    <xs:complexType>
+      <xs:group ref="GTS-cont.model" />
+      <xs:attributeGroup ref="GTS-attrib.list" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="service_tmr" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="origination_dttm">
+    <xs:complexType>
+      <xs:group ref="TS-cont.model" />
+      <xs:attributeGroup ref="TS-attrib.list" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="origination_dttm" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="copy_dttm">
+    <xs:complexType>
+      <xs:group ref="TS-cont.model" />
+      <xs:attributeGroup ref="TS-attrib.list" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="copy_dttm" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="confidentiality_cd">
+    <xs:complexType>
+      <xs:group ref="CE-cont.model" />
+      <xs:attributeGroup ref="CE-attrib.list" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="confidentiality_cd" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="document_relationship">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="document_relationship.type_cd" />
+        <xs:element ref="related_document" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="local_header" />
+      </xs:sequence>
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="is_source_for_service_relationship" />
+      <xs:attribute name="T" type="xs:string" fixed="service_relationship" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="document_relationship.type_cd">
+    <xs:complexType>
+      <xs:group ref="CS-cont.model" />
+      <xs:attribute name="T" type="xs:NMTOKEN" fixed="CS" />
+      <xs:attribute name="V" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="APND" />
+            <xs:enumeration value="RPLC" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="V-T" type="xs:NMTOKEN" fixed="ST" />
+      <xs:attribute name="V-HL7_NAME" type="xs:string" fixed="code" />
+      <xs:attribute name="DN" type="xs:string" />
+      <xs:attribute name="DN-T" type="xs:NMTOKEN" fixed="ST" />
+      <xs:attribute name="DN-HL7_NAME" type="xs:string" fixed="displayName" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="type_cd" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="related_document">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="id" />
+        <xs:element minOccurs="0" ref="set_id" />
+        <xs:element minOccurs="0" ref="version_nbr" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="local_header" />
+      </xs:sequence>
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="has_target_service" />
+      <xs:attribute name="T" type="xs:string" fixed="service" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="fulfills_order">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="fulfills_order.type_cd" />
+        <xs:element maxOccurs="unbounded" ref="order" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="local_header" />
+      </xs:sequence>
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="is_source_for_service_relationship" />
+      <xs:attribute name="T" type="xs:string" fixed="service_relationship" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="fulfills_order.type_cd">
+    <xs:complexType>
+      <xs:group ref="CS-cont.model" />
+      <xs:attribute name="T" type="xs:NMTOKEN" fixed="CS" />
+      <xs:attribute name="V" type="xs:string" fixed="FLFS" />
+      <xs:attribute name="V-T" type="xs:NMTOKEN" fixed="ST" />
+      <xs:attribute name="V-HL7_NAME" type="xs:string" fixed="code" />
+      <xs:attribute name="DN" type="xs:string" />
+      <xs:attribute name="DN-T" type="xs:NMTOKEN" fixed="ST" />
+      <xs:attribute name="DN-HL7_NAME" type="xs:string" fixed="displayName" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="type_cd" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="order">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="id" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="local_header" />
+      </xs:sequence>
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="has_target_service" />
+      <xs:attribute name="T" type="xs:string" fixed="service" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="patient_encounter">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="id" />
+        <xs:element minOccurs="0" ref="practice_setting_cd" />
+        <xs:element ref="encounter_tmr" />
+        <xs:element minOccurs="0" ref="service_location" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="local_header" />
+      </xs:sequence>
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="is_assigned_to_patient_encounter" />
+      <xs:attribute name="T" type="xs:string" fixed="patient_encounter" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="practice_setting_cd">
+    <xs:complexType>
+      <xs:group ref="CE-cont.model" />
+      <xs:attributeGroup ref="CE-attrib.list" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="practice_setting_cd" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="encounter_tmr">
+    <xs:complexType>
+      <xs:group ref="IVL_TS-cont.model" />
+      <xs:attributeGroup ref="IVL_TS-attrib.list" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="encounter_tmr" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="service_location">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="id" />
+        <xs:element minOccurs="0" ref="addr" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="local_header" />
+      </xs:sequence>
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="has_master_patient_service_location" />
+      <xs:attribute name="T" type="xs:string" fixed="master_patient_service_location" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="addr">
+    <xs:complexType>
+      <xs:group ref="AD-cont.model" />
+      <xs:attributeGroup ref="AD-attrib.list" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="addr" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="person">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="id" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="person_name" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="addr" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="telecom" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="local_header" />
+      </xs:sequence>
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="participation_of_person" />
+      <xs:attribute name="T" type="xs:string" fixed="person" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="person_name">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="effective_tmr" />
+        <xs:element ref="nm" />
+        <xs:element minOccurs="0" ref="person_name.type_cd" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="local_header" />
+      </xs:sequence>
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="has_person_name" />
+      <xs:attribute name="T" type="xs:string" fixed="person_name" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="effective_tmr">
+    <xs:complexType>
+      <xs:group ref="IVL_TS-cont.model" />
+      <xs:attributeGroup ref="IVL_TS-attrib.list" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="effective_tmr" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="nm">
+    <xs:complexType>
+      <xs:group ref="PN-cont.model" />
+      <xs:attributeGroup ref="PN-attrib.list" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="nm" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="person_name.type_cd">
+    <xs:complexType>
+      <xs:group ref="CE-cont.model" />
+      <xs:attributeGroup ref="CE-attrib.list" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="type_cd" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="telecom">
+    <xs:complexType>
+      <xs:group ref="TEL-cont.model" />
+      <xs:attributeGroup ref="TEL-attrib.list" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="phon" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="authenticator">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="authenticator.type_cd" />
+        <xs:element ref="participation_tmr" />
+        <xs:element ref="signature_cd" />
+        <xs:element ref="person" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="local_header" />
+      </xs:sequence>
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="has_service_actor" />
+      <xs:attribute name="T" type="xs:string" fixed="service_actor" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="authenticator.type_cd">
+    <xs:complexType>
+      <xs:group ref="CS-cont.model" />
+      <xs:attribute name="T" type="xs:NMTOKEN" fixed="CS" />
+      <xs:attribute name="V" type="xs:string" fixed="VRF" />
+      <xs:attribute name="V-T" type="xs:NMTOKEN" fixed="ST" />
+      <xs:attribute name="V-HL7_NAME" type="xs:string" fixed="code" />
+      <xs:attribute name="DN" type="xs:string" />
+      <xs:attribute name="DN-T" type="xs:NMTOKEN" fixed="ST" />
+      <xs:attribute name="DN-HL7_NAME" type="xs:string" fixed="displayName" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="type_cd" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="participation_tmr">
+    <xs:complexType>
+      <xs:group ref="IVL_TS-cont.model" />
+      <xs:attributeGroup ref="IVL_TS-attrib.list" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="tmr" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="signature_cd">
+    <xs:complexType>
+      <xs:group ref="CS-cont.model" />
+      <xs:attribute name="T" type="xs:NMTOKEN" fixed="CS" />
+      <xs:attribute name="V" default="S">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="S" />
+            <xs:enumeration value="X" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="V-T" type="xs:NMTOKEN" fixed="ST" />
+      <xs:attribute name="V-HL7_NAME" type="xs:string" fixed="code" />
+      <xs:attribute name="DN" type="xs:string" />
+      <xs:attribute name="DN-T" type="xs:NMTOKEN" fixed="ST" />
+      <xs:attribute name="DN-HL7_NAME" type="xs:string" fixed="displayName" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="signature_cd" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="legal_authenticator">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="legal_authenticator.type_cd" />
+        <xs:element ref="participation_tmr" />
+        <xs:element ref="signature_cd" />
+        <xs:element ref="person" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="local_header" />
+      </xs:sequence>
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="has_service_actor" />
+      <xs:attribute name="T" type="xs:string" fixed="service_actor" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="legal_authenticator.type_cd">
+    <xs:complexType>
+      <xs:group ref="CS-cont.model" />
+      <xs:attribute name="T" type="xs:NMTOKEN" fixed="CS" />
+      <xs:attribute name="V" type="xs:string" fixed="SPV" />
+      <xs:attribute name="V-T" type="xs:NMTOKEN" fixed="ST" />
+      <xs:attribute name="V-HL7_NAME" type="xs:string" fixed="code" />
+      <xs:attribute name="DN" type="xs:string" />
+      <xs:attribute name="DN-T" type="xs:NMTOKEN" fixed="ST" />
+      <xs:attribute name="DN-HL7_NAME" type="xs:string" fixed="displayName" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="type_cd" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="intended_recipient">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="intended_recipient.type_cd" />
+        <xs:element ref="person" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="local_header" />
+      </xs:sequence>
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="has_service_actor" />
+      <xs:attribute name="T" type="xs:string" fixed="service_actor" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="intended_recipient.type_cd">
+    <xs:complexType>
+      <xs:group ref="CS-cont.model" />
+      <xs:attribute name="T" type="xs:NMTOKEN" fixed="CS" />
+      <xs:attribute name="V" type="xs:string" fixed="TRC" />
+      <xs:attribute name="V-T" type="xs:NMTOKEN" fixed="ST" />
+      <xs:attribute name="V-HL7_NAME" type="xs:string" fixed="code" />
+      <xs:attribute name="DN" type="xs:string" />
+      <xs:attribute name="DN-T" type="xs:NMTOKEN" fixed="ST" />
+      <xs:attribute name="DN-HL7_NAME" type="xs:string" fixed="displayName" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="type_cd" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="originator">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="originator.type_cd" />
+        <xs:element ref="participation_tmr" />
+        <xs:element ref="person" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="local_header" />
+      </xs:sequence>
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="has_service_actor" />
+      <xs:attribute name="T" type="xs:string" fixed="service_actor" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="originator.type_cd">
+    <xs:complexType>
+      <xs:group ref="CS-cont.model" />
+      <xs:attribute name="T" type="xs:NMTOKEN" fixed="CS" />
+      <xs:attribute name="V" type="xs:string" fixed="AUT" />
+      <xs:attribute name="V-T" type="xs:NMTOKEN" fixed="ST" />
+      <xs:attribute name="V-HL7_NAME" type="xs:string" fixed="code" />
+      <xs:attribute name="DN" type="xs:string" />
+      <xs:attribute name="DN-T" type="xs:NMTOKEN" fixed="ST" />
+      <xs:attribute name="DN-HL7_NAME" type="xs:string" fixed="displayName" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="type_cd" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="originating_organization">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="originating_organization.type_cd" />
+        <xs:element ref="organization" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="local_header" />
+      </xs:sequence>
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="has_service_actor" />
+      <xs:attribute name="T" type="xs:string" fixed="service_actor" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="originating_organization.type_cd">
+    <xs:complexType>
+      <xs:group ref="CS-cont.model" />
+      <xs:attribute name="T" type="xs:NMTOKEN" fixed="CS" />
+      <xs:attribute name="V" type="xs:string" fixed="CST" />
+      <xs:attribute name="V-T" type="xs:NMTOKEN" fixed="ST" />
+      <xs:attribute name="V-HL7_NAME" type="xs:string" fixed="code" />
+      <xs:attribute name="DN" type="xs:string" />
+      <xs:attribute name="DN-T" type="xs:NMTOKEN" fixed="ST" />
+      <xs:attribute name="DN-HL7_NAME" type="xs:string" fixed="displayName" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="type_cd" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="organization">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="id" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="organization.nm" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="addr" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="local_header" />
+      </xs:sequence>
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="participation_of_organization" />
+      <xs:attribute name="T" type="xs:string" fixed="organization" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="organization.nm">
+    <xs:complexType>
+      <xs:group ref="ON-cont.model" />
+      <xs:attributeGroup ref="ON-attrib.list" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="nm" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="transcriptionist">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="transcriptionist.type_cd" />
+        <xs:element minOccurs="0" ref="participation_tmr" />
+        <xs:element ref="person" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="local_header" />
+      </xs:sequence>
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="has_service_actor" />
+      <xs:attribute name="T" type="xs:string" fixed="service_actor" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="transcriptionist.type_cd">
+    <xs:complexType>
+      <xs:group ref="CS-cont.model" />
+      <xs:attribute name="T" type="xs:NMTOKEN" fixed="CS" />
+      <xs:attribute name="V" type="xs:string" fixed="ENT" />
+      <xs:attribute name="V-T" type="xs:NMTOKEN" fixed="ST" />
+      <xs:attribute name="V-HL7_NAME" type="xs:string" fixed="code" />
+      <xs:attribute name="DN" type="xs:string" />
+      <xs:attribute name="DN-T" type="xs:NMTOKEN" fixed="ST" />
+      <xs:attribute name="DN-HL7_NAME" type="xs:string" fixed="displayName" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="type_cd" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="provider">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="provider.type_cd" />
+        <xs:element minOccurs="0" ref="function_cd" />
+        <xs:element minOccurs="0" ref="participation_tmr" />
+        <xs:element ref="person" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="local_header" />
+      </xs:sequence>
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="has_service_actor" />
+      <xs:attribute name="T" type="xs:string" fixed="service_actor" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="provider.type_cd">
+    <xs:complexType>
+      <xs:group ref="CS-cont.model" />
+      <xs:attribute name="T" type="xs:NMTOKEN" fixed="CS" />
+      <xs:attribute name="V" default="PRF">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="ASS" />
+            <xs:enumeration value="CON" />
+            <xs:enumeration value="PRF" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="V-T" type="xs:NMTOKEN" fixed="ST" />
+      <xs:attribute name="V-HL7_NAME" type="xs:string" fixed="code" />
+      <xs:attribute name="DN" type="xs:string" />
+      <xs:attribute name="DN-T" type="xs:NMTOKEN" fixed="ST" />
+      <xs:attribute name="DN-HL7_NAME" type="xs:string" fixed="displayName" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="type_cd" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="function_cd">
+    <xs:complexType>
+      <xs:group ref="CE-cont.model" />
+      <xs:attributeGroup ref="CE-attrib.list" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="function_cd" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="service_actor">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="service_actor.type_cd" />
+        <xs:element minOccurs="0" ref="participation_tmr" />
+        <xs:element minOccurs="0" ref="signature_cd" />
+        <xs:choice>
+          <xs:element ref="person" />
+          <xs:element ref="organization" />
+        </xs:choice>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="local_header" />
+      </xs:sequence>
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="has_service_actor" />
+      <xs:attribute name="T" type="xs:string" fixed="service_actor" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="service_actor.type_cd">
+    <xs:complexType>
+      <xs:group ref="CE-cont.model" />
+      <xs:attributeGroup ref="CE-attrib.list" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="type_cd" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="patient">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="patient.type_cd" />
+        <xs:element minOccurs="0" ref="participation_tmr" />
+        <xs:element ref="person" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="is_known_by" />
+        <xs:element minOccurs="0" ref="birth_dttm" />
+        <xs:element minOccurs="0" ref="administrative_gender_cd" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="local_header" />
+      </xs:sequence>
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="has_service_target" />
+      <xs:attribute name="T" type="xs:string" fixed="service_target" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="patient.type_cd">
+    <xs:complexType>
+      <xs:group ref="CS-cont.model" />
+      <xs:attribute name="T" type="xs:NMTOKEN" fixed="CS" />
+      <xs:attribute name="V" default="PATSBJ">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="PAT" />
+            <xs:enumeration value="PATSBJ" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="V-T" type="xs:NMTOKEN" fixed="ST" />
+      <xs:attribute name="V-HL7_NAME" type="xs:string" fixed="code" />
+      <xs:attribute name="DN" type="xs:string" />
+      <xs:attribute name="DN-T" type="xs:NMTOKEN" fixed="ST" />
+      <xs:attribute name="DN-HL7_NAME" type="xs:string" fixed="displayName" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="type_cd" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="is_known_by">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="id" />
+        <xs:element ref="is_known_to" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="local_header" />
+      </xs:sequence>
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="is_known_by" />
+      <xs:attribute name="T" type="xs:string" fixed="person_provider_association" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="is_known_to">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="id" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="local_header" />
+      </xs:sequence>
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="is_known_to" />
+      <xs:attribute name="T" type="xs:string" fixed="healthcare_service_provider" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="birth_dttm">
+    <xs:complexType>
+      <xs:group ref="TS-cont.model" />
+      <xs:attributeGroup ref="TS-attrib.list" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="birth_dttm" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="administrative_gender_cd">
+    <xs:complexType>
+      <xs:group ref="CE-cont.model" />
+      <xs:attributeGroup ref="CE-attrib.list" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="administrative_gender_cd" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="originating_device">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="originating_device.type_cd" />
+        <xs:element minOccurs="0" ref="participation_tmr" />
+        <xs:element ref="device" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="local_header" />
+      </xs:sequence>
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="has_service_target" />
+      <xs:attribute name="T" type="xs:string" fixed="service_target" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="originating_device.type_cd">
+    <xs:complexType>
+      <xs:group ref="CS-cont.model" />
+      <xs:attribute name="T" type="xs:NMTOKEN" fixed="CS" />
+      <xs:attribute name="V" type="xs:string" fixed="ODV" />
+      <xs:attribute name="V-T" type="xs:NMTOKEN" fixed="ST" />
+      <xs:attribute name="V-HL7_NAME" type="xs:string" fixed="code" />
+      <xs:attribute name="DN" type="xs:string" />
+      <xs:attribute name="DN-T" type="xs:NMTOKEN" fixed="ST" />
+      <xs:attribute name="DN-HL7_NAME" type="xs:string" fixed="displayName" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="type_cd" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="device">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="id" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="responsibility" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="local_header" />
+      </xs:sequence>
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="participation_of_material" />
+      <xs:attribute name="T" type="xs:string" fixed="device" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="responsibility">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="responsibility.type_cd" />
+        <xs:element minOccurs="0" ref="responsibility_tmr" />
+        <xs:element ref="person" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="local_header" />
+      </xs:sequence>
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="is_the_responsibility" />
+      <xs:attribute name="T" type="xs:string" fixed="responsibility" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="responsibility.type_cd">
+    <xs:complexType>
+      <xs:group ref="CE-cont.model" />
+      <xs:attributeGroup ref="CE-attrib.list" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="type_cd" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="responsibility_tmr">
+    <xs:complexType>
+      <xs:group ref="IVL_TS-cont.model" />
+      <xs:attributeGroup ref="IVL_TS-attrib.list" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="tmr" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="service_target">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="service_target.type_cd" />
+        <xs:element minOccurs="0" ref="participation_tmr" />
+        <xs:element ref="person" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="local_header" />
+      </xs:sequence>
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="has_service_target" />
+      <xs:attribute name="T" type="xs:string" fixed="service_target" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="service_target.type_cd">
+    <xs:complexType>
+      <xs:group ref="CE-cont.model" />
+      <xs:attributeGroup ref="CE-attrib.list" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="type_cd" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="local_header">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="local_header" />
+        <xs:element ref="local_attr" />
+      </xs:choice>
+      <xs:attribute name="ignore" default="markup">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="all" />
+            <xs:enumeration value="markup" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="descriptor" type="xs:string" />
+      <xs:attribute name="render" type="xs:string" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="xml:lang" type="xs:NMTOKEN" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="local_attr">
+    <xs:complexType>
+      <xs:attribute name="name" type="xs:NMTOKEN" use="required" />
+      <xs:attribute name="value" type="xs:string" use="required" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="xml:lang" type="xs:NMTOKEN" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="levelone">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="clinical_document_header" />
+        <xs:element ref="body" />
+      </xs:sequence>
+      <xs:attributeGroup ref="body_atts" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="body">
+    <xs:complexType>
+      <xs:choice>
+        <xs:element maxOccurs="unbounded" ref="section" />
+        <xs:element ref="non_xml" />
+      </xs:choice>
+      <xs:attributeGroup ref="body_atts" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="section">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="caption" />
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="structures" />
+          <xs:element ref="section" />
+        </xs:choice>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="coded_entry" />
+      </xs:sequence>
+      <xs:attributeGroup ref="body_atts" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="non_xml">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="REF" />
+        <xs:element ref="THUMBNAIL" />
+        <xs:element ref="NOTE" />
+        <xs:element ref="CONFID" />
+      </xs:choice>
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attribute name="originator" type="xs:IDREFS" />
+      <xs:attribute name="confidentiality" type="xs:IDREFS" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="content">
+    <xs:complexType mixed="true">
+      <xs:sequence minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="entries" />
+      </xs:sequence>
+      <xs:attributeGroup ref="body_atts" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="link">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="link_html" />
+      </xs:sequence>
+      <xs:attributeGroup ref="body_atts" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="link_html">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute name="name" type="xs:string" />
+          <xs:attribute name="href" type="xs:string" />
+          <xs:attribute name="rel" type="xs:string" />
+          <xs:attribute name="rev" type="xs:string" />
+          <xs:attribute name="title" type="xs:string" />
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="coded_entry">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="coded_entry.id" />
+        <xs:element ref="coded_entry.value" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="local_markup" />
+      </xs:sequence>
+      <xs:attributeGroup ref="body_atts" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="coded_entry.id">
+    <xs:complexType>
+      <xs:group ref="II-cont.model" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attributeGroup ref="II-attrib.list" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="coded_entry.value">
+    <xs:complexType>
+      <xs:group ref="CD-cont.model" />
+      <xs:attributeGroup ref="CD-attrib.list" />
+      <xs:attributeGroup ref="common_atts" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="observation_media">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="observation_media.id" />
+        <xs:element ref="observation_media.value" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="local_markup" />
+      </xs:sequence>
+      <xs:attributeGroup ref="body_atts" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="observation" />
+      <xs:attribute name="T" type="xs:string" fixed="observation" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="observation_media.id">
+    <xs:complexType>
+      <xs:group ref="II-cont.model" />
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attributeGroup ref="II-attrib.list" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="id" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="observation_media.value">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="REF" />
+        <xs:element ref="THUMBNAIL" />
+        <xs:element ref="NOTE" />
+        <xs:element ref="CONFID" />
+      </xs:choice>
+      <xs:attributeGroup ref="common_atts" />
+      <xs:attributeGroup ref="ED-attrib.list" />
+      <xs:attribute name="HL7-NAME" type="xs:string" fixed="value" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="local_markup">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="entries" />
+        <xs:element ref="local_attr" />
+      </xs:choice>
+      <xs:attribute name="ignore" default="markup">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="all" />
+            <xs:enumeration value="markup" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="descriptor" type="xs:string" />
+      <xs:attribute name="render" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="paragraph">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="caption" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="content" />
+      </xs:sequence>
+      <xs:attributeGroup ref="body_atts" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="list">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="caption" />
+        <xs:element maxOccurs="unbounded" ref="item" />
+      </xs:sequence>
+      <xs:attributeGroup ref="body_atts" />
+      <xs:attribute name="list_type" default="unordered">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="ordered" />
+            <xs:enumeration value="unordered" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="item">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="caption" />
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element ref="content" />
+          <xs:group ref="structures" />
+        </xs:choice>
+      </xs:sequence>
+      <xs:attributeGroup ref="body_atts" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="table">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="caption" />
+        <xs:choice>
+          <xs:element minOccurs="0" maxOccurs="unbounded" ref="col" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" ref="colgroup" />
+        </xs:choice>
+        <xs:element minOccurs="0" ref="thead" />
+        <xs:element minOccurs="0" ref="tfoot" />
+        <xs:choice>
+          <xs:element maxOccurs="unbounded" ref="tbody" />
+          <xs:element maxOccurs="unbounded" ref="tr" />
+        </xs:choice>
+      </xs:sequence>
+      <xs:attributeGroup ref="body_atts" />
+      <xs:attribute name="summary" type="Text" />
+      <xs:attribute name="width" type="Length" />
+      <xs:attribute name="border" type="Pixels" />
+      <xs:attribute name="frame" type="TFrame" />
+      <xs:attribute name="rules" type="TRules" />
+      <xs:attribute name="cellspacing" type="Length" />
+      <xs:attribute name="cellpadding" type="Length" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="caption">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="link" />
+        <xs:element ref="caption_cd" />
+      </xs:choice>
+      <xs:attributeGroup ref="body_atts" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="caption_cd">
+    <xs:complexType>
+      <xs:group ref="CE-cont.model" />
+      <xs:attributeGroup ref="body_atts" />
+      <xs:attributeGroup ref="CE-attrib.list" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="thead">
+    <xs:complexType>
+      <xs:sequence maxOccurs="unbounded">
+        <xs:element ref="tr" />
+      </xs:sequence>
+      <xs:attributeGroup ref="body_atts" />
+      <xs:attributeGroup ref="cellhalign" />
+      <xs:attributeGroup ref="cellvalign" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="tfoot">
+    <xs:complexType>
+      <xs:sequence maxOccurs="unbounded">
+        <xs:element ref="tr" />
+      </xs:sequence>
+      <xs:attributeGroup ref="body_atts" />
+      <xs:attributeGroup ref="cellhalign" />
+      <xs:attributeGroup ref="cellvalign" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="tbody">
+    <xs:complexType>
+      <xs:sequence maxOccurs="unbounded">
+        <xs:element ref="tr" />
+      </xs:sequence>
+      <xs:attributeGroup ref="body_atts" />
+      <xs:attributeGroup ref="cellhalign" />
+      <xs:attributeGroup ref="cellvalign" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="colgroup">
+    <xs:complexType>
+      <xs:sequence minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="col" />
+      </xs:sequence>
+      <xs:attributeGroup ref="body_atts" />
+      <xs:attribute name="span" type="Number" default="1" />
+      <xs:attribute name="width" type="MultiLength" />
+      <xs:attributeGroup ref="cellhalign" />
+      <xs:attributeGroup ref="cellvalign" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="col">
+    <xs:complexType>
+      <xs:attributeGroup ref="body_atts" />
+      <xs:attribute name="span" type="Number" default="1" />
+      <xs:attribute name="width" type="MultiLength" />
+      <xs:attributeGroup ref="cellhalign" />
+      <xs:attributeGroup ref="cellvalign" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="tr">
+    <xs:complexType>
+      <xs:choice maxOccurs="unbounded">
+        <xs:element ref="th" />
+        <xs:element ref="td" />
+      </xs:choice>
+      <xs:attributeGroup ref="body_atts" />
+      <xs:attributeGroup ref="cellhalign" />
+      <xs:attributeGroup ref="cellvalign" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="th">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="link" />
+        <xs:element ref="caption_cd" />
+      </xs:choice>
+      <xs:attributeGroup ref="body_atts" />
+      <xs:attribute name="abbr" type="Text" />
+      <xs:attribute name="axis" type="xs:string" />
+      <xs:attribute name="headers" type="xs:IDREFS" />
+      <xs:attribute name="scope" type="Scope" />
+      <xs:attribute name="rowspan" type="Number" default="1" />
+      <xs:attribute name="colspan" type="Number" default="1" />
+      <xs:attributeGroup ref="cellhalign" />
+      <xs:attributeGroup ref="cellvalign" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="td">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="entries" />
+        <xs:element ref="paragraph" />
+        <xs:element ref="list" />
+      </xs:choice>
+      <xs:attributeGroup ref="body_atts" />
+      <xs:attribute name="abbr" type="Text" />
+      <xs:attribute name="axis" type="xs:string" />
+      <xs:attribute name="headers" type="xs:IDREFS" />
+      <xs:attribute name="scope" type="Scope" />
+      <xs:attribute name="rowspan" type="Number" default="1" />
+      <xs:attribute name="colspan" type="Number" default="1" />
+      <xs:attributeGroup ref="cellhalign" />
+      <xs:attributeGroup ref="cellvalign" />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

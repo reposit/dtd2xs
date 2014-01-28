@@ -1,0 +1,2952 @@
+<!ENTITY % HL7_V3DT.Version "-//HL7//DTD V3DT 1.0//EN">
+<!--
+	Typical usage within a DTD for an HMD or the PRA...
+	
+	<!ENTITY % V3DT PUBLIC
+	   "-//HL7//DTD V3DT 1.0//EN"
+	   "http://www.hl7.org/XXX/v3dt.dtd">
+	%V3DT;
+
+    The URI used as a system identifier with the public identifier allows
+    the user agent to download the DTD as needed.
+
+    The FPI for the V3DT DTD is:
+
+        "-//HL7//DTD V3DT 1.0//EN"
+
+    and its URI is:
+
+        http://www.hl7.org/XXX/v3dt.dtd
+
+	During the development of this DTD, the FPI will contain a
+	"revision" number in addition to the "version" number.  The revision
+	number will be removed for just prior to balloting.
+	
+	The URI given for this DTD includes the path XXX, since at this
+	time the path where it will be archived has yet to be determined.
+	Once a general policy for archival storage of HL7 DTD has been
+	determined, XXX will be replaced with the proper path.
+  -->
+
+<!--
+     the following type declarations are in the order they are specified
+	 in the abstract document (except for some of the "subsidiary" types,
+	 such as ADXP for AD, which are defined before their "principle" type)
+  -->
+<!--
+    Each datatype definition contains "HL7 Processing Rules", which are
+	statements of required application level validity checks over and above
+	what teh DTD expresses.  The rules are written as XPath expressions.
+	The intention is that the set of rules for each datatype will be
+	embedded in a fixed attribute and a receiving application could then
+	evaluate them and if any fail the receiving application would know
+	that the instance wasn't legal.  At present, some of the rules
+	are still expressed in the syntax that was used for this purpose
+	for the HIMSS demo.
+  -->
+<!--	 
+	The ANY in the HIMSS demo DTD was ANY in the sense of "any type",
+	which was implemented as, essentially, the union of properties from
+	all datatypes.
+	
+	Do we still need an "any type" datatype?  My guess is the answer
+	is yes (for obvservation.value, anywhere else?)...but would
+	like more input before going there.
+  -->
+
+<!-- ............. Code Set null.code.set.............
+                NI      no information
+                NA      not applicable
+                UNK     unknown
+                NASK    not asked
+                ASKU    asked but unknown
+                NAV     not available
+                OTH     other
+                PINF    positive infinity
+                NINF    negative infinity
+   
+   Note: NP (not present) does not appear in this list, because it
+   should never be sent in an instance.  The ITS layer should give
+   the application layer a null flavor of NP for all XML elements/attributes
+   not present in the instance
+  -->
+<!ENTITY % null.code.set '(NI|NA|UNK|NASK|ASKU|NAV|OTH|PINF|NINF)'>
+
+<!--  ========================== Boolean (BL) ========================== 
+
+    *************** HL7 Processing Rules ***************
+
+    @NULL or @V
+    @PROB >= 0 and @PROB <= 1
+    ****************************************************
+
+    <someBL V="true"/>
+	<someOtherBL V="false"/>
+
+     Note: the boolean literals have changed (from T and F) to conform
+	 with the lexical space of the XML Schema boolean datatype.
+	 There is still some possibility that the XML Schema boolean datatype
+	 will change to use 0 and 1, but I'm resisting that.
+      ============================================================   -->
+<!-- ............. Code Set boolean.code.set.............
+                true        TRUE
+                false       FALSE
+  -->
+<!ENTITY % boolean.code.set '(true|false)'>
+<!ENTITY % BL-cont.model '(NOTE?, CONFID?)'>
+<!ENTITY % BL-attrib.list '
+    T                 NMTOKEN #FIXED "BL"
+    NULL              %null.code.set; #IMPLIED
+    V                 %boolean.code.set; #IMPLIED
+    V-T               NMTOKEN #FIXED "BL"
+    V-HL7_NAME        CDATA   #FIXED "value"
+    VT                CDATA   #IMPLIED
+    VT-T              NMTOKEN #FIXED "IVL_TS"
+    VT-HL7_NAME       CDATA   #FIXED "validTime"
+    PROB              CDATA   #IMPLIED
+    PROB-T            NMTOKEN #FIXED "REAL"
+    PROB-HL7_NAME     CDATA   #FIXED "probability"
+'>
+
+<!--
+	======================== Binary Data (BIN) ======================== 
+	The XML ITS does not need to define this datatype, since the
+	only use of it is within the ED datatype, and a complete definition
+	of the datatype is not needed for that purpose
+	============================================================
+  -->
+
+<!--
+	===================== Encapsulated Data (ED) ===================== 
+
+	*************** HL7 Processing Rules ***************
+
+    @V or child::REF
+	@NULL or @MT
+	THUMBNAIL[not(child::THUMBNAIL) or child::THUMBNAIL/@NULL]
+	@T='BIN' and string-length(@V)>0
+	not(@IAC) or @IA
+    @PROB >= 0 and @PROB <= 1
+	@T='ST' and (not(@COMPN) or not(child::REF) or not(child::THUMBNAIL))
+    ****************************************************
+
+		<someED>cellulitis of the left foot</someED>
+		<someED MT="image/png"
+		  IC="aA5mb7c8TXtu392KMsaSa2MKkAwL5LKAo2d99azAs3MdUdw">
+		  <REF V="http://radiology.iumc.edu/xrays/128s8d9ej229se32s.jpg" 
+			   VT="200007200845-0820845" />
+		  <THUMBNAIL MT="image/jpeg" ENC="B64">
+			MNYD83jmMdomSJUEdmde9j44zmMir6edjzMMIjdMDSsWdIJdksIJR3373jeu83
+			6edjzMMIjdMDSsWdIJdksIJR3373jeu83MNYD83jmMdomSJUEdmde9j44zmMir
+			...
+			omSJUEdmde9j44zmMiromSJUEdmde9j44zmMirdMDSsWdIJdksIJR3373jeu83
+			4zmMir6edjzMMIjdMDSsWdIJdksIJR3373jeu83==
+		  </THUMBNAIL>
+		</someED>
+		<someED MT="application/msword" ENC="B64" COMPN="GZ">
+		  omSJUEdmde9j44zmMiromSJUEdmde9j44zmMirdMDSsWdIJdksIJR3373jeu83
+		  6edjzMMIjdMDSsWdIJdksIJR3373jeu83MNYD83jmMdomSJUEdmde9j44zmMir
+		  ...
+		  MNYD83jmMdomSJUEdmde9j44zmMir6edjzMMIjdMDSsWdIJdksIJR3373jeu83
+		  4zmMir6edjzMMIjdMDSsWdIJdksIJR3373jeu83==
+		</someED>
+
+	uses xml:lang for the language property
+	
+    When applicable, the value of the charset property should be
+	obtained from the encoding psuedo attribute of the XML declaration
+	...if the XML declaration or the encoding psuedo attribute is not
+	present in the instance, then the charset is assumed to be UTF-8
+	(as per	the XML 1.0 Rec)
+	
+	Declares the xml namespace as a fixed attribute, which is in scope
+	for this element and its children
+	
+	How should we deal with the "mandatory/recommended/deprecated/other"
+	status of MT and CHARST?  Should that be expressed as an HL7-PR?
+	
+	If present, the value of the IA attribute shall be base64 encoded
+	
+	See note below on the declaration of THUMBNAIL, regarding inherited
+	values for ED properties
+
+	if @IC is valued, the we know that integrityCheckAlgorithm is "SHA-1"
+	
+	value is text() node ONLY if that text() node is the first child
+	only 1st occurance of REF, THUMBNAIL, NOTE and CONFID are significant
+	
+	@ENC does not correspond to any property
+      ============================================================   -->
+<!ENTITY % ED-cont.model '(#PCDATA | REF | THUMBNAIL | NOTE | CONFID)*'>
+<!ENTITY % ED-attrib.list '
+    T                 (ST|ED) "ED"
+    NULL              %null.code.set; #IMPLIED
+	ENC               (B64|TXT) "TXT"
+    MT                CDATA   "text/plain"
+    MT-T              NMTOKEN #FIXED "CS"
+    MT-DOMAIN         NMTOKEN #FIXED "2.16.840.1.113883.6.10"
+    MT-HL7_NAME       CDATA   #FIXED "type"
+	xml:lang          NMTOKEN #IMPLIED
+    xml:lang-T        NMTOKEN #FIXED "CS"
+    xml:lang-HL7_NAME CDATA   #FIXED "language"
+    COMPN             (DF|GZ|ZL|Z) #IMPLIED
+    COMPN-T           NMTOKEN #FIXED "CS"
+    COMPN-HL7_NAME    CDATA   #FIXED "compression"
+	COMPN-DOMAIN      NMTOKEN #FIXED "2.16.840.1.113883.5.1009"
+    IC                CDATA   #IMPLIED
+    IC-T              NMTOKEN #FIXED "BIN"
+    IC-HL7_NAME       CDATA   #FIXED "integrityCheck"
+    VT                CDATA   #IMPLIED
+    VT-T              NMTOKEN #FIXED "IVL_TS"
+    VT-HL7_NAME       CDATA   #FIXED "validTime"
+    PROB              CDATA   #IMPLIED
+    PROB-T            NMTOKEN #FIXED "REAL"
+    PROB-HL7_NAME     CDATA   #FIXED "probability"
+'>
+
+<!--  ========================== String (ST) ========================== 
+
+    *************** HL7 Processing Rules ***************
+
+    @NULL or length(@V)>0
+    @PROB >= 0 and @PROB <= 1
+    ****************************************************
+
+    <someST V="required ST"/>
+
+    The value of the charset property should be
+	obtained from the encoding psuedo attribute of the XML declaration
+	...if the XML declaration or the encoding psuedo attribute is not
+	present in the instance, then the CHARSET is assumed to be UTF-8
+	(as per	the XML 1.0 Rec)
+
+	Declares the xml namespace as a fixed attribute, which is in scope
+	for this element and its children
+	
+	uses xml:lang for the language property
+      ============================================================   -->
+<!ENTITY % ST-cont.model '(#PCDATA | NOTE | CONFID)*'>
+<!ENTITY % ST-attrib.list '
+    T                 CDATA   #FIXED "ST"
+    NULL              %null.code.set; #IMPLIED
+    MT                CDATA   #FIXED "text/plain"
+    MT-T              NMTOKEN #FIXED "CS"
+    MT-HL7_NAME       CDATA   #FIXED "type"
+	xml:lang          NMTOKEN #IMPLIED
+    xml:lang-T        NMTOKEN #FIXED "CS"
+    xml:lang-HL7_NAME CDATA   #FIXED "language"
+    VT                CDATA   #IMPLIED
+    VT-T              NMTOKEN #FIXED "IVL_TS"
+    VT-HL7_NAME       CDATA   #FIXED "validTime"
+    PROB              CDATA   #IMPLIED
+    PROB-T            NMTOKEN #FIXED "REAL"
+    PROB-HL7_NAME     CDATA   #FIXED "probability"
+'>
+
+<!--  ==================== Concept Descriptor (CD) ==================== 
+
+    *************** HL7 Processing Rules ***************
+    
+	@NULL or @V
+	not(@S) or @V
+	not(@V) or @DN
+	not(@ORIGTXT) or not(child::ORIGTXT)
+    @PROB >= 0 and @PROB <= 1
+	****************************************************
+    
+        <someCD T="CD" V="10.3" S="ICD" SV="99" DN="The meaning of the code"/>
+
+	need more examples!!!!
+	
+	Still need processing rules for type demotions
+	
+	rather than have a "code" attribute, simply uses the V attribute
+	(but V-HL7_NAME is still "code")
+	
+	When S and SV appear in a containing element, they are the default
+	coding system and version for subordinate codes.
+
+	You can have EITHER an ORIGTXT child element OR an ORIGTXT attribute,
+	but not both.  If @ORIGTXT is present, then its value is assumed to
+	be the ID of some other element in the current message/document, in
+	which case the value of the originalText property is the PCDATA content
+	of that element.  If @ORIGTXT is present, but doesn't resolve to
+	the ID of some element or the element it resolves to has no PCDATA content,
+	then the value of the originalText property is NULL with the
+	default flavor.  Note: with this mechanism, @ORIGTXT can only
+	point to originalText that, essentially, has a media type of
+	"text/plain".
+============================================================   -->
+
+<!ENTITY % CD-cont.model '(TRANSLTN*, ORIGTXT?, MODIFIER*, NOTE?, CONFID?)'>
+<!ENTITY % CD-attrib.list '
+    T                 (CD|CE|CV|CS) "CD"
+    NULL              %null.code.set; #IMPLIED
+    V                 CDATA   #IMPLIED
+    V-T               NMTOKEN #FIXED "ST"
+    V-HL7_NAME        CDATA   #FIXED "code"
+    DN                CDATA   #IMPLIED
+    DN-T              NMTOKEN #FIXED "ST"
+    DN-HL7_NAME       CDATA   #FIXED "displayName"
+    S                 CDATA   #IMPLIED
+    S-T               NMTOKEN #FIXED "OID"
+    S-HL7_NAME        CDATA   #FIXED "codeSystem"
+    SN                CDATA   #IMPLIED
+    SN-T              NMTOKEN #FIXED "ST"
+    SN-HL7_NAME       CDATA   #FIXED "codeSystemName"
+    SV                CDATA   #IMPLIED
+    SV-T              NMTOKEN #FIXED "ST"
+    SV-HL7_NAME       CDATA   #FIXED "codeSystemVersion"
+    ORIGTXT           IDREF   #IMPLIED
+    ORIGTXT-T         NMTOKEN #FIXED "ST"
+    ORIGTXT-HL7_NAME  CDATA   #FIXED "originalText"
+    VT                CDATA   #IMPLIED
+    VT-T              NMTOKEN #FIXED "IVL_TS"
+    VT-HL7_NAME       CDATA   #FIXED "validTime"
+    PROB              CDATA   #IMPLIED
+    PROB-T            NMTOKEN #FIXED "REAL"
+    PROB-HL7_NAME     CDATA   #FIXED "probability"
+'>
+
+<!--  ==================== Concept Role (CR) ==================== 
+
+    *************** HL7 Processing Rules ***************
+
+	@NULL or child::VALUE
+    @PROB >= 0 and @PROB <= 1
+	****************************************************
+    
+    need example instances!!!!
+		
+	as suggested in the abstract doc, the default value for the
+	inverted property is "false"
+
+	CR is modeled essentially as an extension of CD which
+	adds the name and inverse properties (but the ITS restricts
+	the use of @S, @SN and @SV)
+	============================================================   -->
+
+<!ENTITY % CR-cont.model '(NAME?, %CD-cont.model;)'>
+<!--
+     Unfortunately, we can't use the CD-attrib.list param entity
+	 for CR's attribute list for a number of reasons: 1) the @T's don't
+	 match; 2) CD contains @PROB which CR should have; 3) we need to
+	 supress @S, @SN and @SV.  So, we'll just dup here what we need.
+  -->
+<!ENTITY % CR-attrib.list '
+    T                 NMTOKEN #FIXED "CR"
+    NULL              %null.code.set; #IMPLIED
+    V                 CDATA   #IMPLIED
+    V-T               NMTOKEN #FIXED "ST"
+    V-HL7_NAME        CDATA   #FIXED "code"
+    DN                CDATA   #IMPLIED
+    DN-T              NMTOKEN #FIXED "ST"
+    DN-HL7_NAME       CDATA   #FIXED "displayName"
+    ORIGTXT           IDREF   #IMPLIED
+    ORIGTXT-T         NMTOKEN #FIXED "ST"
+    ORIGTXT-HL7_NAME  CDATA   #FIXED "originalText"
+    INV               %boolean.code.set; "false"
+    INV-T             NMTOKEN #FIXED "BL"
+    INV-HL7_NAME      CDATA   #FIXED "inverted"
+    VT                CDATA   #IMPLIED
+    VT-T              NMTOKEN #FIXED "IVL_TS"
+    VT-HL7_NAME       CDATA   #FIXED "validTime"
+    PROB              CDATA   #IMPLIED
+    PROB-T            NMTOKEN #FIXED "REAL"
+    PROB-HL7_NAME     CDATA   #FIXED "probability"
+'>
+
+<!--  ==================== Coded Simple Value (CS) ==================== 
+
+    *************** HL7 Processing Rules ***************
+
+	@NULL or @V
+    @PROB >= 0 and @PROB <= 1
+	****************************************************
+    
+    need example instances!!!!
+    
+	rather than have a "code" attribute, simply uses the V attribute
+	
+	Question: where does the application get the CONTEXT, to
+	supply the values for S, SV and SN (especially when the instance
+	of CS is the value of an attribute for some other element)...
+	one option is illustrated in the declaration of TEL (see USE-DOMAIN)
+	
+	typo in the abstract doc...duplicate prose describing CNE status of CS
+	============================================================   -->
+
+<!ENTITY % CS-cont.model '(NOTE?, CONFID?)'>
+<!ENTITY % CS-attrib.list '
+    T                 NMTOKEN #FIXED "CS"
+    NULL              %null.code.set; #IMPLIED
+    V                 CDATA   #IMPLIED
+    V-T               NMTOKEN #FIXED "ST"
+    V-HL7_NAME        CDATA   #FIXED "code"
+    DN                CDATA   #IMPLIED
+    DN-T              NMTOKEN #FIXED "ST"
+    DN-HL7_NAME       CDATA   #FIXED "displayName"
+    VT                CDATA   #IMPLIED
+    VT-T              NMTOKEN #FIXED "IVL_TS"
+    VT-HL7_NAME       CDATA   #FIXED "validTime"
+    PROB              CDATA   #IMPLIED
+    PROB-T            NMTOKEN #FIXED "REAL"
+    PROB-HL7_NAME     CDATA   #FIXED "probability"
+'>
+
+<!--  ==================== Coded Value (CV)) ==================== 
+
+    *************** HL7 Processing Rules ***************
+
+	@NULL or @V
+	not(@S) or @V
+	child::ORIGTXT[@MT='text/plain']
+    @PROB >= 0 and @PROB <= 1
+	****************************************************
+    
+    need example instances!!!!    
+	
+	Still need processing rules for type demotion
+	
+	rather than have a "code" attribute, simply uses the V attribute
+	
+	When S and SV appear in a containing element, they are the default coding 
+	system and version for subordinate codes.
+	
+	You can have EITHER an ORIGTXT child element OR an ORIGTXT attribute,
+	but not both.  If @ORIGTXT is present, then its value is assumed to
+	be the ID of some other element in the current message/document, in
+	which case the value of the originalText property is the PCDATA content
+	of that element.  If @ORIGTXT is present, but doesn't resolve to
+	the ID of some element or the element it resolves to has no PCDATA content,
+	then the value of the originalText property is NULL with the
+	default flavor.  Note: with this mechanism, @ORIGTXT can only
+	point to originalText that, essentially, has a media type of
+	"text/plain".
+	============================================================   -->
+
+<!ENTITY % CV-cont.model '(ORIGTXT?, NOTE?, CONFID?)'>
+<!ENTITY % CV-attrib.list '
+    T                 (CS|CV) "CV"
+    NULL              %null.code.set; #IMPLIED
+    V                 CDATA   #IMPLIED
+    V-T               NMTOKEN #FIXED "ST"
+    V-HL7_NAME        CDATA   #FIXED "code"
+    DN                CDATA   #IMPLIED
+    DN-T              NMTOKEN #FIXED "ST"
+    DN-HL7_NAME       CDATA   #FIXED "displayName"
+    S                 CDATA   #IMPLIED
+    S-T               NMTOKEN #FIXED "OID"
+    S-HL7_NAME        CDATA   #FIXED "codeSystem"
+    SN                CDATA   #IMPLIED
+    SN-T              NMTOKEN #FIXED "ST"
+    SN-HL7_NAME       CDATA   #FIXED "codeSystemName"
+    SV                CDATA   #IMPLIED
+    SV-T              NMTOKEN #FIXED "OID"
+    SV-HL7_NAME       CDATA   #FIXED "codeSystemVersion"
+	ORIGTXT           IDREF   #IMPLIED
+	ORIGTXT-T         NMTOKEN #FIXED "ST"
+	ORIGTXT-HL7_NAME  CDATA   #FIXED "originalText"
+    VT                CDATA   #IMPLIED
+    VT-T              NMTOKEN #FIXED "IVL_TS"
+    VT-HL7_NAME       CDATA   #FIXED "validTime"
+    PROB              CDATA   #IMPLIED
+    PROB-T            NMTOKEN #FIXED "REAL"
+    PROB-HL7_NAME     CDATA   #FIXED "probability"
+'>
+
+<!--  ==================== Coded With Equivalents (CE)) ==================== 
+
+    *************** HL7 Processing Rules ***************
+
+	@NULL or @V
+	not(@S) or @V
+	child::TRANSTN[@T='CV' or @T='CS']
+    @PROB >= 0 and @PROB <= 1
+	****************************************************
+    
+    need example instances!!!!
+	
+	Still need processing rules for type demotions
+	
+	rather than have a "code" attribute, simply uses the V attribute
+	
+	When S and SV appear in a containing element, they are the default coding 
+	system and version for subordinate codes.
+
+	You can have EITHER an ORIGTXT child element OR an ORIGTXT attribute,
+	but not both.  If @ORIGTXT is present, then its value is assumed to
+	be the ID of some other element in the current message/document, in
+	which case the value of the originalText property is the PCDATA content
+	of that element.  If @ORIGTXT is present, but doesn't resolve to
+	the ID of some element or the element it resolves to has no PCDATA content,
+	then the value of the originalText property is NULL with the
+	default flavor.  Note: with this mechanism, @ORIGTXT can only
+	point to originalText that, essentially, has a media type of
+	"text/plain".
+	============================================================   -->
+
+<!ENTITY % CE-cont.model '(ORIGTXT?, TRANSLTN*, NOTE?, CONFID?)'>
+<!ENTITY % CE-attrib.list '
+    T                 (CS|CV|CE) "CE"
+    NULL              %null.code.set; #IMPLIED
+    V                 CDATA   #IMPLIED
+    V-T               NMTOKEN #FIXED "ST"
+    V-HL7_NAME        CDATA   #FIXED "code"
+    DN                CDATA   #IMPLIED
+    DN-T              NMTOKEN #FIXED "ST"
+    DN-HL7_NAME       CDATA   #FIXED "displayName"
+    S                 CDATA   #IMPLIED
+    S-T               NMTOKEN #FIXED "OID"
+    S-HL7_NAME        CDATA   #FIXED "codeSystem"
+    SN                CDATA   #IMPLIED
+    SN-T              NMTOKEN #FIXED "ST"
+    SN-HL7_NAME       CDATA   #FIXED "codeSystemName"
+    SV                CDATA   #IMPLIED
+    SV-T              NMTOKEN #FIXED "OID"
+    SV-HL7_NAME       CDATA   #FIXED "codeSystemVersion"
+	ORIGTXT           IDREF   #IMPLIED
+	ORIGTXT-T         NMTOKEN #FIXED "ST"
+	ORIGTXT-HL7_NAME  CDATA   #FIXED "originalText"
+    VT                CDATA   #IMPLIED
+    VT-T              NMTOKEN #FIXED "IVL_TS"
+    VT-HL7_NAME       CDATA   #FIXED "validTime"
+    PROB              CDATA   #IMPLIED
+    PROB-T            NMTOKEN #FIXED "REAL"
+    PROB-HL7_NAME     CDATA   #FIXED "probability"
+'>
+
+<!--  ==================== ISO Object Identifier (OID) ==================== 
+	no need for a separate OID type, since it is never used
+	by itself, but only as the type of property of some other type,
+	in which case it is also used just as a CDATA attribute
+	============================================================   -->
+  
+<!--  ==================== Instance Identifier (II) ==================== 
+
+    *************** HL7 Processing Rules ***************
+
+    @NULL or @RT
+    @PROB >= 0 and @PROB <= 1
+    ****************************************************
+
+    <someII V="optional ST" RT="required OID" ANN="optional ST"
+		VT='2000-06-23-2000-07-24'/>
+
+      ============================================================   -->
+
+<!ENTITY % II-cont.model '(TYPE?, NOTE?, CONFID?)'>
+<!ENTITY % II-attrib.list '
+    T                 NMTOKEN #FIXED "II"
+    NULL              %null.code.set; #IMPLIED
+	EX                CDATA   #IMPLIED
+    EX-T              NMTOKEN #FIXED "ST"
+    EX-HL7_NAME       CDATA   #FIXED "extension"
+    RT                CDATA   #IMPLIED
+    RT-T              NMTOKEN #FIXED "OID"
+    RT-HL7_NAME       CDATA   #FIXED "root"
+    AAN               CDATA   #IMPLIED
+    AAN-T             NMTOKEN #FIXED "ST"
+    AAN-HL7_NAME      CDATA   #FIXED "assigningAuthorityName"
+    VT                CDATA   #IMPLIED
+    VT-T              NMTOKEN #FIXED "IVL_TS"
+    VT-HL7_NAME       CDATA   #FIXED "validTime"
+    PROB              CDATA   #IMPLIED
+    PROB-T            NMTOKEN #FIXED "REAL"
+    PROB-HL7_NAME     CDATA   #FIXED "probability"
+'>
+
+<!--  ================= Uniform Resource Locator (URL) ================= 
+	no need for a separate URL type, since it is never used
+	by itself, but only as the type of property of some other type,
+	in which case it is also used just as a CDATA attribute
+
+    URL's are encoded as a single string, even tho the abstract model
+	has the schema and address as separate properties
+	============================================================   -->
+
+<!--  ================= telecommunication address (TEL) ================= 
+
+    *************** HL7 Processing Rules ***************
+
+    @NULL or @V
+    @PROB >= 0 and @PROB <= 1
+    ****************************************************
+
+    <someTEL V="http://example.com/somePath" USE="WP"/>
+    <someTEL V="tel:(358)555-1234" USE="HP EC"/>
+
+	The latest draft of the Abstract doc mentions a resovledData
+	property, although it doesn't describe that property in detail.
+	I believe the property is ill-defined and should not be present,
+	hence I haven't represented it here.
+      ============================================================   -->
+<!ENTITY % TEL-cont.model '(NOTE?, CONFID?)'>
+<!ENTITY % TEL-attrib.list '
+    T                 NMTOKEN #FIXED "TEL"
+    NULL              %null.code.set; #IMPLIED
+    V                 CDATA   #IMPLIED
+    V-T               NMTOKEN #FIXED "URL"
+    V-HL7_NAME        CDATA   #FIXED "value"
+    USE               NMTOKENS #IMPLIED
+    USE-T             NMTOKEN #FIXED "SET_CS"
+    USE-DOMAIN        CDATA   #FIXED "2.16.840.1.113883.5.1011"
+    USE-HL7_NAME      CDATA   #FIXED "use"
+    VT                CDATA   #IMPLIED
+    VT-T              NMTOKEN #FIXED "GTS"
+    VT-HL7_NAME       CDATA   #FIXED "validTime"
+    PROB              CDATA   #IMPLIED
+    PROB-T            NMTOKEN #FIXED "REAL"
+    PROB-HL7_NAME     CDATA   #FIXED "probability"
+'>
+
+<!--  ========================== address part (ADXP) ==========================
+      address part type codes are represented by sub-element GIs in the
+	  enclosing AD
+      ============================================================   -->
+<!ENTITY % ADXP-cont.model '(NOTE?, CONFID?)'>
+<!ENTITY % ADXP-attrib.list '
+    T                 NMTOKEN #FIXED "ADXP"
+    NULL              %null.code.set; #IMPLIED
+    V                 CDATA   #IMPLIED
+    V-T               NMTOKEN #FIXED "ST"
+    V-HL7_NAME        CDATA   #FIXED "value"
+    VT                CDATA   #IMPLIED
+    VT-T              NMTOKEN #FIXED "IVL_TS"
+    VT-HL7_NAME       CDATA   #FIXED "validTime"
+    PROB              CDATA   #IMPLIED
+    PROB-T            NMTOKEN #FIXED "REAL"
+    PROB-HL7_NAME     CDATA   #FIXED "probability"
+'>
+
+<!--  ============== Postal and Residential Address (AD) ============== 
+
+    *************** HL7 Processing Rules ***************
+
+	@NULL or child::LIT or child::DEL or child::CNT etc.
+    @PROB >= 0 and @PROB <= 1
+	****************************************************
+    <someAD USE="PST"/>
+        <HNR V="970"/>
+        <STR V="Post St"/>
+        <DIR V="NE"/>
+        <CTY V="Alameda"/>
+        <STA V="CA"/>
+        <ZIP V="94501"/>
+    </someAD>
+
+	formated property is represented as @V
+	
+	LIT as an ADXP type code has been removed from the latest draft of
+	the Abstract doc, with the notion being that what was formerly the content
+	of LIT should now become PCDATA...this requires a mixed content model, which
+	I'm not quite ready to introduce...so, LIT is still used here.  The problem
+	with a mixed content model in this case is that child::NOTE's could be
+	sprinkled anywhere and the semantics of that aren't defined.  Having a
+	mixed content model would also make it harder (tho not impossible) to
+	define a good content model for HXIT<AD> (unless of course, we switch
+	to a literal for for IVL<TS>, which would simplify the transfer syntax
+	but complicate the applications)
+      ============================================================   -->
+<!ENTITY % AD-cont.model '((LIT|DEL|CNT|STA|CTY|ZIP|STR|HNR|DIR|ADL|POB)*, NOTE?, CONFID?)'>
+<!ENTITY % AD-attrib.list '
+    T                 NMTOKEN #FIXED "AD"
+    NULL              %null.code.set; #IMPLIED
+    V                 CDATA   #IMPLIED
+    V-T               NMTOKEN #FIXED "ST"
+    V-HL7_NAME        CDATA   #FIXED "formated"
+    USE               NMTOKENS #IMPLIED
+    USE-T             NMTOKEN #FIXED "SET_CS"
+    USE-DOMAIN        CDATA   #FIXED "2.16.840.1.113883.5.1012"
+    USE-HL7_NAME      CDATA   #FIXED "use"
+    VT                CDATA   #IMPLIED
+    VT-T              NMTOKEN #FIXED "GTS"
+    VT-HL7_NAME       CDATA   #FIXED "validTime"
+    PROB              CDATA   #IMPLIED
+    PROB-T            NMTOKEN #FIXED "REAL"
+    PROB-HL7_NAME     CDATA   #FIXED "probability"
+'>
+
+<!--  ================== Person Name Part (PNXP) ================== 
+
+    *************** HL7 Processing Rules ***************
+
+    @NULL or @V
+	****************************************************
+
+      name part type codes are represented by sub-element GIs in the
+	  enclosing PN
+      ============================================================   -->
+<!ENTITY % PNXP-cont.model '(NOTE?, CONFID?)'>
+<!ENTITY % PNXP-attrib.list '
+    T                 NMTOKEN #FIXED "PNXP"
+    NULL              %null.code.set; #IMPLIED
+    V                 CDATA   #IMPLIED
+    V-T               NMTOKEN #FIXED "ST"
+    V-HL7_NAME        CDATA   #FIXED "value"
+    QUAL              NMTOKENS #IMPLIED
+    QUAL-T            NMTOKEN #FIXED "SET_CS"
+    QUAL-DOMAIN       CDATA   #FIXED "2.16.840.1.113883.5.1014"
+    QUAL-HL7_NAME     CDATA   #FIXED "qualifier"
+    VT                CDATA   #IMPLIED
+    VT-T              NMTOKEN #FIXED "IVL_TS"
+    VT-HL7_NAME       CDATA   #FIXED "validTime"
+    PROB              CDATA   #IMPLIED
+    PROB-T            NMTOKEN #FIXED "REAL"
+    PROB-HL7_NAME     CDATA   #FIXED "probability"
+'>
+
+<!--  ======================== Person Name (PN) ======================== 
+
+    *************** HL7 Processing Rules ***************
+
+    The order in which the name parts are sent should represent the natural 
+    order for displaying the name. It is not required to break names down 
+    using all of the elements, although individual nations may require 
+    specific elements. Displaying a name depends on the white space rules 
+    included in the V3DT report. It may be necessary to preserve white space 
+    in certain elements.
+	
+    @PROB >= 0 and @PROB <= 1
+    ****************************************************
+
+    <somePN NOTE="This is an example of 'Wesley Rishel'">
+        <FAM V="Rishel" QUAL="BR RE"/>
+        <GIV V="Wesley" QUAL="BR RE"/>
+    </somePN>
+
+    <somePN NOTE="This is an example of 'Irma Corine Jongeneel-de Haas'">
+        <GIV V="Irma" QUAL="RE"/>
+        <GIV V="Corine" QUAL="RE"/>
+        <FAM V="Jongeneel" QUAL="RE SP"/>
+        <DEL V="-"/>
+        <FAM V="de Haas" QUAL="RE BR"/>
+    </somePN>
+
+	uses @V to represent the formated property
+      ============================================================   -->
+<!ENTITY % PN-cont.model '((GIV|MID|FAM|PFX|SFX|DEL)*, NOTE?, CONFID?)'>
+<!ENTITY % PN-attrib.list '
+    T                 NMTOKEN #FIXED "PN"
+    NULL              %null.code.set; #IMPLIED
+    V                 CDATA   #IMPLIED
+    V-T               NMTOKEN #FIXED "ST"
+    V-HL7_NAME        CDATA   #FIXED "formated"
+    VT                CDATA   #IMPLIED
+    VT-T              NMTOKEN #FIXED "IVL_TS"
+    VT-HL7_NAME       CDATA   #FIXED "validTime"
+    PROB              CDATA   #IMPLIED
+    PROB-T            NMTOKEN #FIXED "REAL"
+    PROB-HL7_NAME     CDATA   #FIXED "probability"
+'>
+
+<!--  ===================== Organization Name (ON) ===================== 
+
+    *************** HL7 Processing Rules ***************
+
+    @NULL or @V
+    @PROB >= 0 and @PROB <= 1
+	****************************************************
+
+    <someON TYPE="optional CS" V="optional ST"/>
+
+	should this be modeled closer to AD and PN?
+      ============================================================   -->
+<!ENTITY % ON-cont.model '(NOTE?, CONFID?)'>
+<!ENTITY % ON-attrib.list '
+    T                 NMTOKEN #FIXED "ON"
+    NULL              %null.code.set; #IMPLIED
+    V                 CDATA   #IMPLIED
+    V-T               NMTOKEN #FIXED "ST"
+    V-HL7_NAME        CDATA   #FIXED "value"
+    TYPE              (L|A|ST) #IMPLIED
+    TYPE-T            NMTOKEN #FIXED "CS"
+	TYPE-DOMAIN       CDATA   #FIXED "2.16.840.1.113883.5.1015"
+    TYPE-HL7_NAME     CDATA   #FIXED "type"
+    VT                CDATA   #IMPLIED
+    VT-T              NMTOKEN #FIXED "IVL_TS"
+    VT-HL7_NAME       CDATA   #FIXED "validTime"
+    PROB              CDATA   #IMPLIED
+    PROB-T            NMTOKEN #FIXED "REAL"
+    PROB-HL7_NAME     CDATA   #FIXED "probability"
+'>
+
+<!--  ========================== Quantity (QTY) ========================== 
+
+    *************** HL7 Processing Rules ***************
+
+    @NULL or @V
+    ###not xpath### INT|REAL|TS ::= V or PQ|MO ::= V, U?
+	not(@T='PQ' or @T='MO' or @T='TS') or @U  ### I think does the HL7-PR above
+	@PROB >= 0 and @PROB <= 1
+    ****************************************************
+
+    <someQTY T="INT|REAL|PQ|MO" V="123.75" U="mg/dL"/>
+	
+	Unless @T=TS, @CAL is meaningless and should be ignored
+	
+	The cardinality/default value for QTY is defined as a param entity
+	whose starting value is "#IMPLIED".  We do it this way so that the
+	NUM and DENOM properties of RTO can take on the default value
+	"1" as specified in the abstract ballot.
+      ============================================================   -->
+<!ENTITY % QTY-cont.model '(NOTE?, CONFID?)'>
+<!ENTITY % QTY-default.value '#IMPLIED'>
+<!ENTITY % QTY-attrib.list '
+    T                 (INT|REAL|PQ|MO|TS) "INT"
+    NULL              %null.code.set; #IMPLIED
+    V                 CDATA   %QTY-default.value;
+    V-T               NMTOKEN #FIXED "ST"
+    V-HL7_NAME        CDATA   #FIXED "value"
+    U                 CDATA   #IMPLIED
+    U-T               NMTOKEN #FIXED "CS"
+    U-HL7_NAME        CDATA   #FIXED "unit"
+    VT                CDATA   #IMPLIED
+    VT-T              NMTOKEN #FIXED "IVL_TS"
+    VT-HL7_NAME       CDATA   #FIXED "validTime"
+    PROB              CDATA   #IMPLIED
+    PROB-T            NMTOKEN #FIXED "REAL"
+    PROB-HL7_NAME     CDATA   #FIXED "probability"
+'>
+
+<!--  ========================== Integer (INT) ========================== 
+
+    *************** HL7 Processing Rules ***************
+
+    @NULL or @V
+    @PROB >= 0 and @PROB <= 1
+    ****************************************************
+
+    <someINT V="required ST"/>
+
+	The "exceptional" values positive and negative infinity are
+	represented as null flavors
+      ============================================================   -->
+
+<!ENTITY % INT-cont.model '(NOTE?, CONFID?)'>
+<!ENTITY % INT-attrib.list '
+    T                 NMTOKEN #FIXED "INT"
+    NULL              %null.code.set; #IMPLIED
+    V                 CDATA   #IMPLIED
+    V-T               NMTOKEN #FIXED "ST"
+    V-HL7_NAME        CDATA   #FIXED "value"
+    VT                CDATA   #IMPLIED
+    VT-T              NMTOKEN #FIXED "IVL_TS"
+    VT-HL7_NAME       CDATA   #FIXED "validTime"
+    PROB              CDATA   #IMPLIED
+    PROB-T            NMTOKEN #FIXED "REAL"
+    PROB-HL7_NAME     CDATA   #FIXED "probability"
+'>
+
+<!--  ======================== Real Number (REAL) ======================== 
+
+    *************** HL7 Processing Rules ***************
+
+    @NULL or @V
+    @PROB >= 0 and @PROB <= 1
+    ****************************************************
+
+    <someREAL V="required REAL"/>
+
+	The "exceptional" values positive and negative infinity are
+	represented as null flavors
+	
+	Note: XML Schema currently allows trailing zeros in its literals
+	of type decimal, hence we will be able to get the precision property
+	from the literals.  However, there is discussion within the WG
+	to disallow trailing zeros, and if this happens, we will have to
+	add @PREC or some such
+      ============================================================   -->
+<!ENTITY % REAL-cont.model '(NOTE?, CONFID?)'>
+<!ENTITY % REAL-attrib.list '
+    T                 NMTOKEN #FIXED "REAL"
+    NULL              %null.code.set; #IMPLIED
+    V                 CDATA   #IMPLIED
+    V-T               NMTOKEN #FIXED "ST"
+    V-HL7_NAME        CDATA   #FIXED "value"
+    VT                CDATA   #IMPLIED
+    VT-T              NMTOKEN #FIXED "IVL_TS"
+    VT-HL7_NAME       CDATA   #FIXED "validTime"
+    PROB              CDATA   #IMPLIED
+    PROB-T            NMTOKEN #FIXED "REAL"
+    PROB-HL7_NAME     CDATA   #FIXED "probability"
+'>
+
+<!--  ==================== Ratio of Quantities (RTO) ==================== 
+
+    *************** HL7 Processing Rules ***************
+
+    @NULL or (child::NUM and not(child::NUM/@NULL))
+    @NULL or (child::DENOM[@V!='0'] and not(child::DENOM/@NULL))
+    @PROB >= 0 and @PROB <= 1
+    ****************************************************
+
+    <someRTO>
+        <NUM T="INT|REAL|PQ|MO" V="123.75" U="mg/dL"/>
+        <DENOM T="INT|REAL|PQ|MO" V="123.75" U="mg/dL"/>
+    </someRTO>
+	
+	How should the demotion to PQ and REAL be handled?
+      ============================================================   -->
+<!ENTITY % RTO-cont.model '((NUM, DENOM)?, NOTE?, CONFID?)'>
+<!ENTITY % RTO-attrib.list '
+    T                 NMTOKEN #FIXED "RTO"
+    NULL              %null.code.set; #IMPLIED
+    VT                CDATA   #IMPLIED
+    VT-T              NMTOKEN #FIXED "IVL_TS"
+    VT-HL7_NAME       CDATA   #FIXED "validTime"
+    PROB              CDATA   #IMPLIED
+    PROB-T            NMTOKEN #FIXED "REAL"
+    PROB-HL7_NAME     CDATA   #FIXED "probability"
+'>
+
+<!--  ====================== Physical Quantity (PQ) ====================== 
+
+    *************** HL7 Processing Rules ***************
+
+    @NULL or (@V and @U)
+    @PROB >= 0 and @PROB <= 1
+    ****************************************************
+
+    <somePQ V="1123.37" U="cm"/>
+
+    Does the XML ITS have to say *anything* about about the
+	canonical form for a PQ?
+      ==================================== ========================   -->
+<!ENTITY % PQ-cont.model '(NOTE?, CONFID?)'>
+<!ENTITY % PQ-attrib.list '
+    T                 NMTOKEN #FIXED "PQ"
+    NULL              %null.code.set; #IMPLIED
+    V                 CDATA   #IMPLIED
+    V-T               NMTOKEN #FIXED "REAL"
+    V-HL7_NAME        CDATA   #FIXED "value"
+    U                 CDATA   #IMPLIED
+    U-T               NMTOKEN #FIXED "CS"
+    U-HL7_NAME        CDATA   #FIXED "unit"
+    VT                CDATA   #IMPLIED
+    VT-T              NMTOKEN #FIXED "IVL_TS"
+    VT-HL7_NAME       CDATA   #FIXED "validTime"
+    PROB              CDATA   #IMPLIED
+    PROB-T            NMTOKEN #FIXED "REAL"
+    PROB-HL7_NAME     CDATA   #FIXED "probability"
+'>
+
+<!--  ====================== Monetary Amount (MO) ====================== 
+
+    *************** HL7 Processing Rules ***************
+
+    @NULL or (@V and @U)
+    @PROB >= 0 and @PROB <= 1
+    ****************************************************
+
+    <someMO V="1123.37" U="USD"/>
+
+	Why is there an MO type to begin with...why can't this just be a
+	restriction of PQ, where the domain of unit is fixed to ISO 4217?
+      ==================================== ========================   -->
+
+<!ENTITY % MO-cont.model '(NOTE?, CONFID?)'>
+<!ENTITY % MO-attrib.list '
+    T                 NMTOKEN #FIXED "MO"
+    NULL              %null.code.set; #IMPLIED
+    V                 CDATA   #IMPLIED
+    V-T               NMTOKEN #FIXED "REAL"
+    V-HL7_NAME        CDATA   #FIXED "value"
+    U                 CDATA   #IMPLIED
+    U-T               NMTOKEN #FIXED "CS"
+	U-DOMAIN          CDATA   #FIXED "2.16.840.1.113883.6.9"
+    U-HL7_NAME        CDATA   #FIXED "currency"
+    VT                CDATA   #IMPLIED
+    VT-T              NMTOKEN #FIXED "IVL_TS"
+    VT-HL7_NAME       CDATA   #FIXED "validTime"
+    PROB              CDATA   #IMPLIED
+    PROB-T            NMTOKEN #FIXED "REAL"
+    PROB-HL7_NAME     CDATA   #FIXED "probability"
+'>
+
+<!--  ======================= Point in Time (TS) ======================= 
+
+    *************** HL7 Processing Rules ***************
+
+    @NULL or @V
+    @PROB >= 0 and @PROB <= 1
+    ****************************************************
+
+    <someTS V="19990924162403-0800"/>
+
+	the timezone property is conveyed as part of value (V)
+	instead of as a separate property (there is some call w/i the
+	XML Schema WG that ALL time-related datatypes in the schema spec
+	should be specified in UTC, I'm fighting that but may loose)
+	
+	offset is not represented at all (and to editorialize, I believe
+	should be removed from the abstract type, unless the epoch is also
+	added...semantically, it does no good to know that some point in
+	time is 1 day from an epoch if I don't also know what the epoch is).
+      ============================================================   -->
+<!ENTITY % TS-cont.model '(NOTE?, CONFID?)'>
+<!ENTITY % TS-attrib.list '
+    T                 NMTOKEN #FIXED "TS"
+    NULL              %null.code.set; #IMPLIED
+    V                 CDATA   #IMPLIED
+    V-T               NMTOKEN #FIXED "ST"
+    V-HL7_NAME        CDATA   #FIXED "value"
+    VT                CDATA   #IMPLIED
+    VT-T              NMTOKEN #FIXED "IVL_TS"
+    VT-HL7_NAME       CDATA   #FIXED "validTime"
+    PROB              CDATA   #IMPLIED
+    PROB-T            NMTOKEN #FIXED "REAL"
+    PROB-HL7_NAME     CDATA   #FIXED "probability"
+'>
+
+<!-- We do not need SET<T> for all T -->
+<!-- We do not need LIST<T> for all T -->
+<!-- We do not need BAG<T> for all T -->
+
+<!--  ================ interval of physical quantities (IVL_PQ) ================ 
+
+    To avoid redundancy and difficulty in processing we factor the
+    units from both bounds into one unit of the interval. This
+    requires both low and high bound to have a common unit. Width,
+    however must have its own unit, since in difference-scale
+    quantities the width may be of a different unit.
+
+    *************** HL7 Processing Rules ***************
+
+    The following combinations of components are valid:
+
+    @NULL or @V
+    @PROB >= 0 and @PROB <= 1
+	****************************************************
+
+    <someIVL_PQ LOW="optional REAL" LOW_CLOSED="optional BL" HIGH="optional REAL"
+        HIGH_CLOSED="optional BL" UNIT="optional CV" WID="optional PQ"/>
+
+	The XML ITS does not support promotion of a PQ into an IVL_PQ,
+	although demotion of IVL_PQ to PQ is supported (using @V and @U)
+      ============================================================   -->
+<!ENTITY % IVL_PQ-cont.model "(NOTE?, CONFID?)">
+<!ENTITY % IVL_PQ-attrib.list "
+    T                 (IVL_PQ|PQ) 'IVL_PQ'
+    NULL              %null.code.set; #IMPLIED
+    V                 CDATA   #IMPLIED
+    V-T               NMTOKEN #FIXED 'REAL'
+    V-HL7_NAME        CDATA   #FIXED 'value'
+    U                 CDATA   #IMPLIED
+    U-T               NMTOKEN #FIXED 'CS'
+    U-HL7_NAME        CDATA   #FIXED 'unit'
+    VT                CDATA   #IMPLIED
+    VT-T              NMTOKEN #FIXED 'IVL_TS'
+    VT-HL7_NAME       CDATA   #FIXED 'validTime'
+    PROB              CDATA   #IMPLIED
+    PROB-T            NMTOKEN #FIXED 'REAL'
+    PROB-HL7_NAME     CDATA   #FIXED 'probability'
+">
+
+<!--  ================ interval of points in time (IVL_TS) ================ 
+
+    *************** HL7 Processing Rules ***************
+
+    The following combinations of components are valid:
+
+    ****************************************************
+
+    Note that DIF_TS is just an alias for PQ with a dimensional
+    constraint on the unit (PQ in the dimension of time.)
+
+	The XML ITS does not support promotion of a PQ into an IVL_PQ,
+	although demotion of IVL_PQ to PQ is supported (using @V and @U)
+
+	literals (e.g., values of @V) follow literal form from section
+	7.4.3 of abstract ballot
+      ============================================================   -->
+<!ENTITY % IVL_TS-cont.model "(NOTE?, CONFID?)">
+<!ENTITY % IVL_TS-attrib.list "
+    T                 NMTOKEN #FIXED 'IVL_TS'
+    NULL              %null.code.set; #IMPLIED
+    V                 CDATA   #IMPLIED
+	V-T               NMTOKEN #FIXED 'TS'
+	V-HL7_NAME        CDATA   #FIXED 'value'
+    VT                CDATA   #IMPLIED
+    VT-T              NMTOKEN #FIXED 'IVL_TS'
+    VT-HL7_NAME       CDATA   #FIXED 'validTime'
+    PROB              CDATA   #IMPLIED
+    PROB-T            NMTOKEN #FIXED 'REAL'
+    PROB-HL7_NAME     CDATA   #FIXED 'probability'
+">
+
+<!--  ================= Periodic Interval of Time (PIVL) ================= 
+	no need for a separate PIVL type, since it is never used
+	by itself, but only to define the semantics of GTS
+	============================================================   -->
+<!--  ============ Event-Related Periodic Interval of Time (EIVL) ========
+	no need for a separate EIVL type, since it is never used
+	by itself, but only to define the semantics of GTS
+	============================================================   -->
+
+<!--  ================ General Timing Specification (GTS) ================ 
+
+    *************** HL7 Processing Rules ***************
+
+    The following combinations of components are valid:
+
+    @NULL or @V
+    @PROB >= 0 and @PROB <= 1
+    ****************************************************
+        need examples!!!
+		
+	The values of @V follow the Literal Form in section 8.3.1.3 of the
+	abstract ballot
+      ============================================================   -->
+<!ENTITY % GTS-cont.model '(NOTE?, CONFID?)'>
+<!ENTITY % GTS-attrib.list '
+    T                 NMTOKEN #FIXED "GTS"
+    NULL              %null.code.set; #IMPLIED
+    V                 CDATA #IMPLIED
+    V-T               NMTOKEN #FIXED "GTS"
+    V-HL7_NAME        CDATA   #FIXED "value"
+    VT                CDATA   #IMPLIED
+    VT-T              NMTOKEN #FIXED "IVL_TS"
+    VT-HL7_NAME       CDATA   #FIXED "validTime"
+    PROB              CDATA   #IMPLIED
+    PROB-T            NMTOKEN #FIXED "REAL"
+    PROB-HL7_NAME     CDATA   #FIXED "probability"
+'>
+
+
+<!--  ========================== ANT<T> ========================== 
+     no need for ANT<T> since all types defined for the XML ITS
+	 already include an optional note property
+      ============================================================   -->
+
+<!--  ========================== HIST<T> ========================== 
+     no need for HIST<T> since all types defined for the XML ITS
+	 already include an optional validTime property (and hence, are HXIT<T>),
+	 and HIST<T> is simply an optionally repeating HXIT<T>
+      ============================================================   -->
+
+<!--  ================ Uncertain Value-Narrative (UVN<T>) ================ 
+     no need for UVN<T> since all types defined for the XML ITS
+	 already include an optional confidence property
+      ============================================================   -->
+
+<!--  ================ Uncertain Value-Probabilistic (UVP<T>) ================ 
+     no need for UVP<T> since all types defined for the XML ITS
+	 already include an optional probability property
+      ============================================================   -->
+
+<!--  ============ Non-Parametric Probability Distribution (NPPD<T>) ============ 
+     no need for NPPD<T> since all types defined for the XML ITS
+	 already include an optional probability property (and hence,
+	 are already UVP<T>) and NPPD<T> is simply an optionally
+	 repeating UVP<T>
+      ============================================================   -->
+
+<!--  ========================== PPD<QTY> ========================== 
+
+    *************** HL7 Processing Rules ***************
+
+    @NULL or @V
+    ****************************************************
+
+     need examples!!!
+	 
+	The XML ITS does not support promoting a QTY to a PPD<QTY>
+      ============================================================   -->
+<!ENTITY % PPD_QTY-cont.model '(NOTE?, CONFID?)'>
+<!ENTITY % PPD_QTY-attrib.list '
+    T                 (PPD_INT|PPD_REAL|PPD_PQ|PPD_MO|PPD_TS) "PPD_INT"
+    NULL              %null.code.set; #IMPLIED
+    V                 CDATA   #IMPLIED
+    V-T               NMTOKEN #FIXED "REAL"
+    V-HL7_NAME        CDATA   #FIXED "value"
+    U                 CDATA   #IMPLIED
+    U-T               NMTOKEN #FIXED "ST"
+    U-HL7_NAME        CDATA   #FIXED "unit"
+    SD                CDATA   #IMPLIED
+    SD-T              NMTOKEN #FIXED "REAL"
+    SD-HL7_NAME       CDATA   #FIXED "standardDeviation"
+    SDU               CDATA   #IMPLIED
+    SDU-T             NMTOKEN #FIXED "CS"
+    SDU-HL7_NAME      CDATA   #FIXED "standardDeviation unit"
+    TY                (U|N|LN|G|E|X2|T|F|B) #IMPLIED
+    TY-T              NMTOKEN #FIXED "CS"
+    TY-DOMAIN         CDATA   #FIXED "2.16.840.1.113883.5.1019"
+    TY-HL7_NAME       CDATA   #FIXED "type"	
+    VT                CDATA   #IMPLIED
+    VT-T              NMTOKEN #FIXED "IVL_TS"
+    VT-HL7_NAME       CDATA   #FIXED "validTime"
+    PROB              CDATA   #IMPLIED
+    PROB-T            NMTOKEN #FIXED "REAL"
+    PROB-HL7_NAME     CDATA   #FIXED "probability"
+'>
+<!--  ========================== PPD<REAL> ========================== 
+
+    *************** HL7 Processing Rules ***************
+
+    @NULL or @V
+    ****************************************************
+
+     need examples!!!
+	 
+	 The abstract ballot says that @TY is of type CV...shouldn't
+	 it really be of type CS since the domain is fixed and no
+	 exceptions are allowed?  Assuming so, none of extra properties
+	 of CV are represented
+	 
+	The XML ITS does not support promoting a REAL to a PPD<REAL>
+      ============================================================   -->
+<!ENTITY % PPD_REAL-cont.model '(NOTE?, CONFID?)'>
+<!ENTITY % PPD_REAL-attrib.list '
+    T                 NMTOKEN #FIXED "PPD_REAL"
+    NULL              %null.code.set; #IMPLIED
+    V                 CDATA   #IMPLIED
+    V-T               NMTOKEN #FIXED "REAL"
+    V-HL7_NAME        CDATA   #FIXED "value"
+    SD                CDATA   #IMPLIED
+    SD-T              NMTOKEN #FIXED "REAL"
+    SD-HL7_NAME       CDATA   #FIXED "standardDeviation"
+    TY                (U|N|LN|G|E|X2|T|F|B) #IMPLIED
+    TY-T              NMTOKEN #FIXED "CS"
+    TY-DOMAIN         CDATA   #FIXED "2.16.840.1.113883.5.1019"
+    TY-HL7_NAME       CDATA   #FIXED "type"	
+    VT                CDATA   #IMPLIED
+    VT-T              NMTOKEN #FIXED "IVL_TS"
+    VT-HL7_NAME       CDATA   #FIXED "validTime"
+    PROB              CDATA   #IMPLIED
+    PROB-T            NMTOKEN #FIXED "REAL"
+    PROB-HL7_NAME     CDATA   #FIXED "probability"
+'>
+<!--  ========================== PPD<QTY> ========================== 
+
+    *************** HL7 Processing Rules ***************
+
+    @NULL or @V
+    ****************************************************
+
+     need examples!!!
+	 
+	The XML ITS does not support promoting a PQ to a PPD<PQ>
+      ============================================================   -->
+<!ENTITY % PPD_PQ-cont.model '(NOTE?, CONFID?)'>
+<!ENTITY % PPD_PQ-attrib.list '
+    T                 NMTOKEN #FIXED "PPD_PQ"
+    NULL              %null.code.set; #IMPLIED
+    V                 CDATA   #IMPLIED
+    V-T               NMTOKEN #FIXED "REAL"
+    V-HL7_NAME        CDATA   #FIXED "value"
+    U                 CDATA   #IMPLIED
+    U-T               NMTOKEN #FIXED "ST"
+    U-HL7_NAME        CDATA   #FIXED "unit"
+    SD                CDATA   #IMPLIED
+    SD-T              NMTOKEN #FIXED "REAL"
+    SD-HL7_NAME       CDATA   #FIXED "standardDeviation"
+    SDU               CDATA   #IMPLIED
+    SDU-T             NMTOKEN #FIXED "CS"
+    SDU-HL7_NAME      CDATA   #FIXED "standardDeviation unit"
+    TY                (U|N|LN|G|E|X2|T|F|B) #IMPLIED
+    TY-T              NMTOKEN #FIXED "CS"
+    TY-DOMAIN         CDATA   #FIXED "2.16.840.1.113883.5.1019"
+    TY-HL7_NAME       CDATA   #FIXED "type"	
+    VT                CDATA   #IMPLIED
+    VT-T              NMTOKEN #FIXED "IVL_TS"
+    VT-HL7_NAME       CDATA   #FIXED "validTime"
+    PROB              CDATA   #IMPLIED
+    PROB-T            NMTOKEN #FIXED "REAL"
+    PROB-HL7_NAME     CDATA   #FIXED "probability"
+'>
+<!--  ========================== PPD<TS> ========================== 
+
+    *************** HL7 Processing Rules ***************
+
+    @NULL or @V
+    ****************************************************
+
+     need examples!!!
+	 
+	The XML ITS does not support promoting a TS to a PPD<TS>
+      ============================================================   -->
+<!ENTITY % PPD_TS-cont.model '(NOTE?, CONFID?)'>
+<!ENTITY % PPD_TS-attrib.list '
+    T                 NMTOKEN #FIXED "PPD_TS"
+    NULL              %null.code.set; #IMPLIED
+    V                 CDATA   #IMPLIED
+    V-T               NMTOKEN #FIXED "REAL"
+    V-HL7_NAME        CDATA   #FIXED "value"
+    SD                CDATA   #IMPLIED
+    SD-T              NMTOKEN #FIXED "REAL"
+    SD-HL7_NAME       CDATA   #FIXED "standardDeviation"
+    SDU               CDATA   #IMPLIED
+    SDU-T             NMTOKEN #FIXED "CS"
+    SDU-HL7_NAME      CDATA   #FIXED "standardDeviation unit"
+    TY                (U|N|LN|G|E|X2|T|F|B) #IMPLIED
+    TY-T              NMTOKEN #FIXED "CS"
+    TY-DOMAIN         CDATA   #FIXED "2.16.840.1.113883.5.1019"
+    TY-HL7_NAME       CDATA   #FIXED "type"	
+    VT                CDATA   #IMPLIED
+    VT-T              NMTOKEN #FIXED "IVL_TS"
+    VT-HL7_NAME       CDATA   #FIXED "validTime"
+    PROB              CDATA   #IMPLIED
+    PROB-T            NMTOKEN #FIXED "REAL"
+    PROB-HL7_NAME     CDATA   #FIXED "probability"
+'>
+
+<!--
+     while some of these elements could be declared up with
+	 their main datatype, others can't since the para-enties
+	 need for them wouldn't yet have been defined; hence, we
+	 just put them all here.
+
+     Also, there are most likely HL7-PR's associated with some
+	 (all?) of these properties, but I haven't had the time to
+	 check into that
+  -->
+
+<!--
+     elements required for ANT<T>
+  -->
+<!ELEMENT NOTE %CE-cont.model;>
+<!ATTLIST NOTE
+	%CE-attrib.list;
+    HL7_NAME          CDATA   #FIXED 'note'
+>
+<!--
+     elements required for UVN<T>
+  -->
+<!ELEMENT CONFID %CV-cont.model;>
+<!ATTLIST CONFID
+	%CV-attrib.list;
+    HL7_NAME          CDATA   #FIXED 'confidence'
+>
+<!--
+     elements required for ED properties
+  -->
+<!ELEMENT REF %TEL-cont.model;>
+<!ATTLIST REF
+	%TEL-attrib.list;
+    HL7_NAME          CDATA   #FIXED 'reference'
+>
+<!--
+     Following the ITS note in the abstract ballot, any properties
+	 of the THUMBNAIL not specified in the instance are to be "inherited"
+	 from the enclosing ED element.
+	 
+	 Note: actually, the ITS note only mentions the type, charset and compression
+	 properties, but I think it equally applies to all properties
+  -->
+<!ELEMENT THUMBNAIL %ED-cont.model;>
+<!ATTLIST THUMBNAIL
+	%ED-attrib.list;
+    HL7_NAME          CDATA   #FIXED 'thumbnail'
+>
+
+<!--
+     elements required for CD properties (and related types)
+  -->
+<!ELEMENT ORIGTXT     %ED-cont.model;>
+<!ATTLIST ORIGTXT
+    %ED-attrib.list;
+    HL7_NAME          CDATA   #FIXED 'originalText'
+>
+<!ELEMENT MODIFIER    %CR-cont.model;>
+<!ATTLIST MODIFIER
+    %CR-attrib.list;
+    HL7_NAME          CDATA   #FIXED 'modifier'
+>
+<!ELEMENT TRANSLTN   %CD-cont.model;>
+<!ATTLIST TRANSLTN
+    %CD-attrib.list;
+    HL7_NAME          CDATA   #FIXED 'translation'
+>
+
+<!--
+     elements required for CR properties
+  -->
+<!ELEMENT NAME     %CV-cont.model;>
+<!ATTLIST NAME
+    %CV-attrib.list;
+    HL7_NAME          CDATA   #FIXED 'name'
+>
+
+<!--
+     elements required for II properties
+  -->
+<!ELEMENT TYPE      %CV-cont.model;>
+<!ATTLIST TYPE
+    %CV-attrib.list;
+    HL7_NAME          CDATA   #FIXED 'type'
+>
+
+<!--
+     elements required for AD properties
+  -->
+<!ELEMENT LIT        %ADXP-cont.model;>
+<!ATTLIST LIT
+    %ADXP-attrib.list;
+    HL7_NAME         CDATA   #FIXED 'literal'
+>
+<!ELEMENT DEL        %ADXP-cont.model;>
+<!ATTLIST DEL
+    %ADXP-attrib.list;
+    HL7_NAME         CDATA   #FIXED 'delimiter'
+>
+<!ELEMENT CNT        %ADXP-cont.model;>
+<!ATTLIST CNT
+    %ADXP-attrib.list;
+    HL7_NAME         CDATA   #FIXED 'country'
+>
+<!ELEMENT CTY        %ADXP-cont.model;>
+<!ATTLIST CTY
+    %ADXP-attrib.list;
+    HL7_NAME         CDATA   #FIXED 'city'
+>
+<!ELEMENT STA        %ADXP-cont.model;>
+<!ATTLIST STA
+    %ADXP-attrib.list;
+    HL7_NAME         CDATA   #FIXED 'state'
+>
+<!ELEMENT ZIP        %ADXP-cont.model;>
+<!ATTLIST ZIP
+    %ADXP-attrib.list;
+    HL7_NAME         CDATA   #FIXED 'postal code'
+>
+<!ELEMENT STR        %ADXP-cont.model;>
+<!ATTLIST STR
+    %ADXP-attrib.list;
+    HL7_NAME         CDATA   #FIXED 'street name'
+>
+<!ELEMENT HNR        %ADXP-cont.model;>
+<!ATTLIST HNR
+    %ADXP-attrib.list;
+    HL7_NAME         CDATA   #FIXED 'house number'
+>
+<!ELEMENT DIR        %ADXP-cont.model;>
+<!ATTLIST DIR
+    %ADXP-attrib.list;
+    HL7_NAME          CDATA   #FIXED 'direction'
+>
+<!ELEMENT ADL        %ADXP-cont.model;>
+<!ATTLIST ADL
+    %ADXP-attrib.list;
+    HL7_NAME         CDATA   #FIXED 'address locator'
+>
+<!ELEMENT POB        %ADXP-cont.model;>
+<!ATTLIST POB
+    %ADXP-attrib.list;
+    HL7_NAME         CDATA   #FIXED 'post office box'
+>
+
+<!--
+     elements required for PN properties
+  -->
+<!ELEMENT FAM        %PNXP-cont.model;>
+<!ATTLIST FAM
+    %PNXP-attrib.list;
+    HL7_NAME         CDATA   #FIXED 'family'
+>
+<!ELEMENT GIV        %PNXP-cont.model;>
+<!ATTLIST GIV
+    %PNXP-attrib.list;
+    HL7_NAME         CDATA   #FIXED 'given'
+>
+<!ELEMENT MID        %PNXP-cont.model;>
+<!ATTLIST MID
+    %PNXP-attrib.list;
+    HL7_NAME         CDATA   #FIXED 'middle'
+>
+<!ELEMENT PFX        %PNXP-cont.model;>
+<!ATTLIST PFX
+    %PNXP-attrib.list;
+    HL7_NAME         CDATA   #FIXED 'prefix'
+>
+<!ELEMENT SFX        %PNXP-cont.model;>
+<!ATTLIST SFX
+    %PNXP-attrib.list;
+    HL7_NAME         CDATA   #FIXED 'suffix'
+>
+
+<!------------------------------------------------------- NOT REFERRED TO IN THE CDA
+
+<!ELEMENT PN.DEL        %PNXP-cont.model;>
+<!ATTLIST PN.DEL
+    %PNXP-attrib.list;
+    HL7_NAME         CDATA   #FIXED 'delimiter'
+>
+
+elements required for RTO properties
+
+<!ELEMENT NUM          %QTY-cont.model;>
+<!ENTITY % QTY-default.value '1'>
+<!ATTLIST NUM
+    %QTY-attrib.list;
+    HL7_NAME          CDATA   #FIXED 'numerator'
+>
+
+<!ELEMENT DENOM          %QTY-cont.model;>
+<!ATTLIST DENOM
+    %QTY-attrib.list;
+    HL7_NAME          CDATA   #FIXED 'denominator'
+>
+
+------------------------------------------------------->
+
+<!ENTITY % QTY-default.value '#IMPLIED'>
+
+<!--
+	Revsion history
+	
+	2000-06-27:
+		a) A long history in which I didn't explicitly record revision comments.
+		b) assigned this revision number 0.9
+	
+	2000-06-28:
+		a) added this revision history section
+		b) added a "usage" comment to the top of the DTD which includes
+		   the specification of both a full URI and an FPI for this DTD
+		c) removed UPDATE_MODE (and the param entities needed to
+		   support it).  The funcationality will be handled at the
+		   general XML ITS level.
+		d) changed the definition of ED:@T to be the enumeration (ST|ED)
+		   instead of the #FIXED value ED...made ED the default
+		e) added X-DOMAIN #FIXED attributes for ED:@COMPN, ED:@IAC
+		   with their values being taken from the OID table on page 104
+		   of the Abstract doc
+		f) changed the HL7_NAME for ED:@IC, ED:@IAC, CD:@V, CD:@S, CD:@SN,
+		   CD:@SV, CD:ORIGTEXT, CS:@V, CS:@DN, CV:@V, CV:@DN, CV:@S, SV:@SN,
+		   CV:@SV, CE:@V, CE:@DN, CE:@S, CE:@SN, CE:@SV to match their spelling in
+		   the Abstract doc
+		g) fixed a bug in the declaration of ED:@IAC, including adding
+		   a param entity which enumerates the domain
+		h) corrected the HL7_NAME for ST:@MT, to be "type" instead of
+		   "media type"
+		i) removed ENTITY decl for OID, and replaced all references to that
+		   OID back to CDATA
+		j) added producer and quality properties to CD, as per the latest
+		   revision of the Abstract doc
+		k) remove CR:@V and associated attributes and added a VALUE sub-element,
+		   since the value property is of type CD
+		l) assigned this revision number 0.91
+	2000-06-29:
+		a) added an HL7-PR to CE which says that the type of any TRANSLN
+		   children must be either CV or CS
+		b) changed the attribute type of CE:@T to the enumeration (CS|CV|CE)
+		   which defaults to CE, to handle type demotion for CE
+		c) changed the HL7_NAME for CV:@V, CV:@DN, CV:@S, CV:@SN, CV:@SV,
+		   CE:@V, CE:@DN, CE:@S, CE:@SN, CE:@SV, II:@V, II:@AAN to match
+		   their spelling in the Abstract doc
+		d) changed II:@VT to II:child::VALIDTIME, since the validTime
+		   property is of type IVL<TS>, we can't do it as an attribute
+		e) changed II:@TYPE to II:child::TYPE, since the type property is
+		   of type CV, we can't do it as an attribute
+		f) removed tel.use.code.set and tel.use.code.default param entities,
+		   since they were not actually correctly used in the definition of
+		   the TEL type
+		g) changed the #FIXED value of TEL:@USE-DOMAIN to the OID from the table
+		   on p 104
+		h) removed ad.purpose.code.set param entity, since it was not actually
+		   used in the definition of the AD type
+		i) added AD:@USE-DOMAIN and #FIXED its value to the OID from the table
+		   on p. 104
+		j) removed pnxp.qualifier.code.set param entity, since it was not actually
+		   used in the definition of the PNXP type
+		k) added PN:@USE-DOMAIN and #FIXED its value to the OID from the table
+		   on p. 104
+		l) changed the required-repeating group in AD and PN content modesl to
+		   optional-repeating, to allow for NULL-able message elements
+		m) assigned this revision number 0.92
+	2000-06-30:
+		a) Added ON:@TYPE-DOMAIN, with #FIXED value from the OID table on p 104
+		b) assigned this revision number 0.921
+	2000-07-05:
+		a) added ability to specify originalText property of CD as either
+		   a child::ORIGTXT or as @ORIGTXT.
+		b) assigned this revision number 0.922
+	2000-07-19:
+		a) Removed CD:@Q since quality appears to have disappeared from the
+		   final abstract ballot doc
+		b) added processing rule to CV which says that if child::ORIGTXT is
+		   present, its @MT must have the value "text/plain"
+		c) added @ORIGTXT to appropriate subtypes of CD
+		d) added AD:@VT
+		e) re-added null.code.set param entity decl, which somehow got removed
+		f) changed QTY:@V-T,INT:@V-T and REAL:@V-T to ST
+		g) added note to INT/REAL about PINF/NINF as null flavors
+		h) added note to REAL about precision and XML Schema
+		i) changed processor rule for RTO to require a non-zero DENOM
+		   (if DENOM is not null)
+		j) consolidated the processing rules for PQ into a single rule
+		k) consolidated the processing rules for MO into a single rule
+		l) added MO:@U-DOMAIN and #FIXED its value to the OID from the table in
+		   appendix A
+		m) added note on IVL<T> that center property is not represented,
+		   but can be calculated
+		n) added preliminary xpath processing rules to IVL<T> (they may
+		   not be correct)
+		o) Added @V to all IVL<QTY> to support demotion.  Also added note
+		   that promotion of a QTY to IVL<QTY> is also not supported.
+		p) added note on all IVL<T> asking whether we want to get rid of
+		   the structured rep and go to a simple literal form?
+		q) fixed typo in attlist decl for the TYPE element and %ED-attrib.list;
+		r) changed name of HXIT_AD to HXIT_AD.VALUE and added child::VALIDTIME
+		s) added a processing rule to AD which says that either it is null
+		   or at least one address part is given
+		t) added optional child::CONFID to all T content models, so that
+		   all T are really UVN<T>
+		u) added @PROB to all T, so that all T are really UVP<T>...question:
+		   do we need a processing rule which says that we really have either
+		   a UVN<T> or a UVP<T> but not both?
+		v) added TS:@CAL-DOMAIN and #FIXED its value to the OID from the table in
+		   appendix A
+		w) added note that promotion of a QTY to PPD<QTY> is not supported.
+		   added @CAL to support newly added demotion to PPD_TS.
+		x) added QTY:@CAL to support TS as an extension of QTY
+		y) added ED:@MT-DOMAIN and #FIXED its value to the OID from the table in
+		   appendix A
+		z) expanded all param entities used as enumerated attribute type domains
+		   if the param entity was only used once...removed param entity decl
+		   as well.  Only %null.code.set; and %boolean.code.set; remain.
+		A) assigned this revision number 0.93
+	2000-07-20:
+		a) added a processing rule to ED which says that when demoted to ST,
+		   no compression algorithm can be specified and no references are
+		   allowed.
+		b) assigned this revision number 0.931
+	2000-07-21:
+		a) removed CD&CR:@P, they were added mistakenly (they're from an
+		   earlier draft of the abstract ballot)
+		b) per GS's comments, redefined CR as essentially an extension of 
+		   CD which adds child::NAME and @INV
+		c) assinged this revision number 0.932
+	2000-07-23:
+		a) made ED into a mixed content model, with "value" in PCDATA; added
+		   ED:@ENC (B64|TXT) [TXT is default]
+		b) removed ED:@ICA
+		c) removed structured form of IVL_TS, now uses literal form from 7.3.4
+		   of ballot doc
+		d) removed II:child::VALIDTIME and replaced it with II:@VT
+		e) changed II:@V to II:@EX
+  -->
+<!--
+============================================================
+============================================================
+HL7 Clinical Document Architecture, Version 1.0 
+
+CDA Header DTD
+
+Public Identifier :: "-//HL7//DTD CDA Header 1.0//EN"
+
+Derived from HL7 Reference Information Model, Version 0.98
+
+DTD Last Revised: September 18, 2000
+============================================================
+============================================================
+-->
+
+
+<!--
+============================================================
+============================================================
+Import the V3 data type DTD
+
+(The following system id must be changed to point to the location of the V3DT file on your system.)
+============================================================
+============================================================
+-->
+
+<!ENTITY % HL7V3.0-datatypes PUBLIC 
+  "-//HL7//DTD V3DT 1.0//EN" 
+  "v3DT_1.0.dtd" >
+%HL7V3.0-datatypes;
+
+<!--
+============================================================
+============================================================
+Common attributes
+
+============================================================
+============================================================
+-->
+
+<!ENTITY % common_atts "
+  ID ID #IMPLIED "
+>
+
+<!--
+============================================================
+============================================================
+The base RIM class for the DTD is Document_service
+
+============================================================
+============================================================
+-->
+
+<!ELEMENT clinical_document_header (
+  id,
+  set_id?,
+  version_nbr?,
+  document_type_cd,
+  service_tmr?,
+  origination_dttm,
+  copy_dttm?,
+  confidentiality_cd*,
+  document_relationship*,
+  fulfills_order?,
+  patient_encounter?,
+  authenticator*,
+  legal_authenticator?,
+  intended_recipient*,
+  originator*,
+  originating_organization?,
+  transcriptionist?,
+  provider+,
+  service_actor*,
+  patient,
+  originating_device*,
+  service_target*,
+  local_header*)>
+<!ATTLIST clinical_document_header
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'document_service_as_clinical_document_header'
+  T CDATA #FIXED 'service'
+  RIM-VERSION CDATA #FIXED '0.98'>
+
+<!--
+============================================================
+============================================================
+RIM components (classes, attributes, associations) nested under clinical_document_header
+
+There are four logical components of the CDA Header:
+(1) Document information; 
+(2) Encounter data; 
+(3) Service actors (such as providers); 
+(4) Service targets (such as patients). 
+
+The four components are presented in this order, similar to their order in the CDA Header Hierarchical Description.
+============================================================
+============================================================
+-->
+
+<!--
+============================================================
+============================================================
+Document Information
+
+Document information identifies the document, defines confidentiality status, and describes relationships to other documents and orders. 
+============================================================
+============================================================
+-->
+
+<!--
+============================================================
+Document Information :: Document Identification
+
+Elements declared in this section include:
+<id>, <set_id>, <version_nbr>, <document_type_cd>
+============================================================
+-->
+
+<!ELEMENT id %II-cont.model;>
+<!ATTLIST id
+  %II-attrib.list;
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'id'>
+
+<!ELEMENT set_id %II-cont.model;>
+<!ATTLIST set_id
+  %II-attrib.list;
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'set_id'>
+
+<!ELEMENT version_nbr %INT-cont.model;>
+<!ATTLIST version_nbr
+  %INT-attrib.list;
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'version_nbr'>
+
+<!ELEMENT document_type_cd %CE-cont.model;>
+<!ATTLIST document_type_cd
+  %CE-attrib.list;
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'service_cd'>
+
+<!--
+============================================================
+Document Information :: Document Time Stamps
+
+Elements declared in this section include:
+<service_tmr>, <origination_dttm>, <copy_dttm>
+============================================================
+-->
+
+<!ELEMENT service_tmr %GTS-cont.model;>
+<!ATTLIST service_tmr
+  %GTS-attrib.list;
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'service_tmr'>
+
+<!ELEMENT origination_dttm %TS-cont.model;>
+<!ATTLIST origination_dttm
+  %TS-attrib.list;
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'origination_dttm'>
+
+<!ELEMENT copy_dttm %TS-cont.model;>
+<!ATTLIST copy_dttm
+  %TS-attrib.list;
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'copy_dttm'>
+
+<!--
+============================================================
+Document Information :: Document Confidentiality
+
+Elements declared in this section include:
+<confidentiality_cd>
+============================================================
+-->
+
+<!ELEMENT confidentiality_cd %CE-cont.model;>
+<!ATTLIST confidentiality_cd
+  %CE-attrib.list;
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'confidentiality_cd'>
+
+<!--
+============================================================
+Document Information :: Document Relationships
+
+Elements declared in this section include:
+<document_relationship>, <document_relationship.type_cd>, <related_document>, <fulfills_order>, <fulfills_order.type_cd>, <order>
+============================================================
+-->
+
+<!ELEMENT document_relationship (
+  document_relationship.type_cd,
+  related_document,
+  local_header*)>
+<!ATTLIST document_relationship
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'is_source_for_service_relationship'
+  T CDATA #FIXED 'service_relationship'>
+
+<!ELEMENT document_relationship.type_cd %CS-cont.model;>
+<!ATTLIST document_relationship.type_cd
+  T NMTOKEN #FIXED "CS"
+  V (APND|RPLC) #REQUIRED
+  V-T NMTOKEN #FIXED "ST"
+  V-HL7_NAME CDATA   #FIXED "code"
+  DN CDATA #IMPLIED
+  DN-T NMTOKEN #FIXED "ST"
+  DN-HL7_NAME CDATA #FIXED "displayName"
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'type_cd'>
+
+<!ELEMENT related_document (
+  id,
+  set_id?,
+  version_nbr?,
+  local_header*)>
+<!ATTLIST related_document
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'has_target_service'
+  T CDATA #FIXED 'service'>
+
+<!ELEMENT fulfills_order (
+  fulfills_order.type_cd,
+  order+,
+  local_header*)>
+<!ATTLIST fulfills_order
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'is_source_for_service_relationship'
+  T CDATA #FIXED 'service_relationship'>
+
+<!ELEMENT fulfills_order.type_cd %CS-cont.model;>
+<!ATTLIST fulfills_order.type_cd
+  T NMTOKEN #FIXED "CS"
+  V CDATA #FIXED "FLFS"
+  V-T NMTOKEN #FIXED "ST"
+  V-HL7_NAME CDATA   #FIXED "code"
+  DN CDATA #IMPLIED
+  DN-T NMTOKEN #FIXED "ST"
+  DN-HL7_NAME CDATA #FIXED "displayName"
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'type_cd'>
+
+<!ELEMENT order (
+  id,
+  local_header*)>
+<!ATTLIST order
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'has_target_service'
+  T CDATA #FIXED 'service'>
+
+<!--
+============================================================
+============================================================
+Encounter Data
+
+Encounter data describes the setting in which the documented encounter occurred. 
+
+Elements declared in this section include:
+<patient_encounter>, <practice_setting_cd>, <encounter_tmr>, <service_location>, <addr>
+============================================================
+============================================================
+-->
+
+<!ELEMENT patient_encounter (
+  id?,
+  practice_setting_cd?,
+  encounter_tmr,
+  service_location?,
+  local_header*)>
+<!ATTLIST patient_encounter
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'is_assigned_to_patient_encounter'
+  T CDATA #FIXED 'patient_encounter'>
+
+<!ELEMENT practice_setting_cd %CE-cont.model;>
+<!ATTLIST practice_setting_cd
+  %CE-attrib.list;
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'practice_setting_cd'>
+
+<!ELEMENT encounter_tmr %IVL_TS-cont.model;>
+<!ATTLIST encounter_tmr
+  %IVL_TS-attrib.list;
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'encounter_tmr'>
+
+<!ELEMENT service_location (
+  id?,
+  addr?,
+  local_header*)>
+<!ATTLIST service_location
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'has_master_patient_service_location'
+  T CDATA #FIXED 'master_patient_service_location'>
+
+<!ELEMENT addr %AD-cont.model;>
+<!ATTLIST addr
+  %AD-attrib.list;
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'addr'>
+
+<!--
+============================================================
+============================================================
+Service Actors
+
+Service actors include those who authenticate the document, those intended to receive a copy of the document, document originators and transcriptionists, and health care providers who participated in the service(s) being documented.
+============================================================
+============================================================
+-->
+
+<!--
+============================================================
+Service Actors :: People Responsible for a Clinical Document
+
+Elements declared in this section include:
+<person>, <person_name>, <effective_tmr>, <nm>, <person_name.type_cd>, <telecom>
+============================================================
+-->
+
+<!ELEMENT person (
+  id+,
+  person_name*,
+  addr*,
+  telecom*,
+  local_header*)>
+<!ATTLIST person
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'participation_of_person'
+  T CDATA #FIXED 'person'>
+
+<!ELEMENT person_name (
+  effective_tmr?,
+  nm,
+  person_name.type_cd?,
+  local_header*)>
+<!ATTLIST person_name
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'has_person_name'
+  T CDATA #FIXED 'person_name'>
+
+<!ELEMENT effective_tmr %IVL_TS-cont.model;>
+<!ATTLIST effective_tmr
+  %IVL_TS-attrib.list;
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'effective_tmr'>
+
+<!ELEMENT nm %PN-cont.model;>
+<!ATTLIST nm
+  %PN-attrib.list;
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'nm'>
+
+<!ELEMENT person_name.type_cd %CE-cont.model;>
+<!ATTLIST person_name.type_cd
+  %CE-attrib.list;
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'type_cd'>
+
+<!ELEMENT telecom %TEL-cont.model;>
+<!ATTLIST telecom
+  %TEL-attrib.list;
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'phon'>
+
+<!--
+============================================================
+Service Actors :: Authenticators
+
+Elements declared in this section include:
+<authenticator>, <authenticator.type_cd>, <participation_tmr>, <signature_cd>, <legal_authenticator>, <legal_authenticator.type_cd>
+============================================================
+-->
+
+<!ELEMENT authenticator (
+  authenticator.type_cd,
+  participation_tmr,
+  signature_cd,
+  person,
+  local_header*)>
+<!ATTLIST authenticator
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'has_service_actor'
+  T CDATA #FIXED 'service_actor'>
+
+<!ELEMENT authenticator.type_cd %CS-cont.model;>
+<!ATTLIST authenticator.type_cd
+  T NMTOKEN #FIXED "CS"
+  V CDATA #FIXED "VRF"
+  V-T NMTOKEN #FIXED "ST"
+  V-HL7_NAME CDATA   #FIXED "code"
+  DN CDATA #IMPLIED
+  DN-T NMTOKEN #FIXED "ST"
+  DN-HL7_NAME CDATA #FIXED "displayName"
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'type_cd'>
+
+<!ELEMENT participation_tmr %IVL_TS-cont.model;>
+<!ATTLIST participation_tmr
+  %IVL_TS-attrib.list;
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'tmr'>
+
+<!ELEMENT signature_cd %CS-cont.model;>
+<!ATTLIST signature_cd
+  T NMTOKEN #FIXED "CS"
+  V (S|X) "S"
+  V-T NMTOKEN #FIXED "ST"
+  V-HL7_NAME CDATA   #FIXED "code"
+  DN CDATA #IMPLIED
+  DN-T NMTOKEN #FIXED "ST"
+  DN-HL7_NAME CDATA #FIXED "displayName"
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'signature_cd'>
+
+<!ELEMENT legal_authenticator (
+  legal_authenticator.type_cd,
+  participation_tmr,
+  signature_cd,
+  person,
+  local_header*)>
+<!ATTLIST legal_authenticator
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'has_service_actor'
+  T CDATA #FIXED 'service_actor'>
+
+<!ELEMENT legal_authenticator.type_cd %CS-cont.model;>
+<!ATTLIST legal_authenticator.type_cd
+  T NMTOKEN #FIXED "CS"
+  V CDATA #FIXED "SPV"
+  V-T NMTOKEN #FIXED "ST"
+  V-HL7_NAME CDATA   #FIXED "code"
+  DN CDATA #IMPLIED
+  DN-T NMTOKEN #FIXED "ST"
+  DN-HL7_NAME CDATA #FIXED "displayName"
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'type_cd'>
+
+<!--
+============================================================
+Service Actors :: Intended Recipients
+
+Elements declared in this section include:
+<intended_recipient>, <intended_recipient.type_cd>
+============================================================
+-->
+
+<!ELEMENT intended_recipient (
+  intended_recipient.type_cd,
+  person,
+  local_header*)>
+<!ATTLIST intended_recipient
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'has_service_actor'
+  T CDATA #FIXED 'service_actor'>
+
+<!ELEMENT intended_recipient.type_cd %CS-cont.model;>
+<!ATTLIST intended_recipient.type_cd
+  T NMTOKEN #FIXED "CS"
+  V CDATA #FIXED "TRC"
+  V-T NMTOKEN #FIXED "ST"
+  V-HL7_NAME CDATA   #FIXED "code"
+  DN CDATA #IMPLIED
+  DN-T NMTOKEN #FIXED "ST"
+  DN-HL7_NAME CDATA #FIXED "displayName"
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'type_cd'>
+
+<!--
+============================================================
+Service Actors :: Originators
+
+Elements declared in this section include:
+<originator>, <originator.type_cd>, <originating_organization>, <originating_organization.type_cd>, <organization>, <organization.nm>
+============================================================
+-->
+
+<!ELEMENT originator (
+  originator.type_cd,
+  participation_tmr,
+  person,
+  local_header*)>
+<!ATTLIST originator
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'has_service_actor'
+  T CDATA #FIXED 'service_actor'>
+
+<!ELEMENT originator.type_cd %CS-cont.model;>
+<!ATTLIST originator.type_cd
+  T NMTOKEN #FIXED "CS"
+  V CDATA #FIXED "AUT"
+  V-T NMTOKEN #FIXED "ST"
+  V-HL7_NAME CDATA   #FIXED "code"
+  DN CDATA #IMPLIED
+  DN-T NMTOKEN #FIXED "ST"
+  DN-HL7_NAME CDATA #FIXED "displayName"
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'type_cd'>
+
+<!ELEMENT originating_organization (
+  originating_organization.type_cd,
+  organization,
+  local_header*)>
+<!ATTLIST originating_organization
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'has_service_actor'
+  T CDATA #FIXED 'service_actor'>
+
+<!ELEMENT originating_organization.type_cd %CS-cont.model;>
+<!ATTLIST originating_organization.type_cd
+  T NMTOKEN #FIXED "CS"
+  V CDATA #FIXED "CST"
+  V-T NMTOKEN #FIXED "ST"
+  V-HL7_NAME CDATA   #FIXED "code"
+  DN CDATA #IMPLIED
+  DN-T NMTOKEN #FIXED "ST"
+  DN-HL7_NAME CDATA #FIXED "displayName"
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'type_cd'>
+
+<!ELEMENT organization (
+  id*,
+  organization.nm*,
+  addr*,
+  local_header*)>
+<!ATTLIST organization
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'participation_of_organization'
+  T CDATA #FIXED 'organization'>
+
+<!ELEMENT organization.nm %ON-cont.model;>
+<!ATTLIST organization.nm
+  %ON-attrib.list;
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'nm'>
+
+<!--
+============================================================
+Service Actors :: Transcriptionist
+
+Elements declared in this section include:
+<transcriptionist>, <transcriptionist.type_cd>
+============================================================
+-->
+
+<!ELEMENT transcriptionist (
+  transcriptionist.type_cd,
+  participation_tmr?,
+  person,
+  local_header*)>
+<!ATTLIST transcriptionist
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'has_service_actor'
+  T CDATA #FIXED 'service_actor'>
+
+<!ELEMENT transcriptionist.type_cd %CS-cont.model;>
+<!ATTLIST transcriptionist.type_cd
+  T NMTOKEN #FIXED "CS"
+  V CDATA #FIXED "ENT"
+  V-T NMTOKEN #FIXED "ST"
+  V-HL7_NAME CDATA   #FIXED "code"
+  DN CDATA #IMPLIED
+  DN-T NMTOKEN #FIXED "ST"
+  DN-HL7_NAME CDATA #FIXED "displayName"
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'type_cd'>
+
+<!--
+============================================================
+Service Actors :: Healthcare providers
+
+Elements declared in this section include:
+<provider>, <provider.type_cd>, <function_cd>
+============================================================
+-->
+
+<!ELEMENT provider (
+  provider.type_cd,
+  function_cd?,
+  participation_tmr?,
+  person,
+  local_header*)>
+<!ATTLIST provider
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'has_service_actor'
+  T CDATA #FIXED 'service_actor'>
+
+<!ELEMENT provider.type_cd %CS-cont.model;>
+<!ATTLIST provider.type_cd
+  T NMTOKEN #FIXED "CS"
+  V (ASS|CON|PRF) "PRF"
+  V-T NMTOKEN #FIXED "ST"
+  V-HL7_NAME CDATA   #FIXED "code"
+  DN CDATA #IMPLIED
+  DN-T NMTOKEN #FIXED "ST"
+  DN-HL7_NAME CDATA #FIXED "displayName"
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'type_cd'>
+
+<!ELEMENT function_cd %CE-cont.model;>
+<!ATTLIST function_cd
+  %CE-attrib.list;
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'function_cd'>
+
+<!--
+============================================================
+Service Actors :: Other Service Actors
+
+Elements declared in this section include:
+<service_actor>, <service_actor.type_cd>
+============================================================
+-->
+
+<!ELEMENT service_actor (
+  service_actor.type_cd,
+  participation_tmr?,
+  signature_cd?,
+  (person | organization),
+  local_header*)>
+<!ATTLIST service_actor
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'has_service_actor'
+  T CDATA #FIXED 'service_actor'>
+
+<!ELEMENT service_actor.type_cd %CE-cont.model;>
+<!ATTLIST service_actor.type_cd
+  %CE-attrib.list;
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'type_cd'>
+
+<!--
+============================================================
+============================================================
+Service Targets
+
+Service targets include the patient, other significant participants (such as family members), and those devices that may have originated portions of the document.
+============================================================
+============================================================
+-->
+
+<!--
+============================================================
+Service Targets :: Patient
+
+Elements declared in this section include:
+<patient>, <patient.type_cd>, <assigned_identifier>, <is_known_by>, <birth_dttm>, <administrative_gender_cd>
+============================================================
+-->
+
+<!ELEMENT patient (
+  patient.type_cd,
+  participation_tmr?,
+  person,
+  is_known_by*,
+  birth_dttm?,
+  administrative_gender_cd?,
+  local_header*)>
+<!ATTLIST patient
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'has_service_target'
+  T CDATA #FIXED 'service_target'>
+
+<!ELEMENT patient.type_cd %CS-cont.model;>
+<!ATTLIST patient.type_cd
+  T NMTOKEN #FIXED "CS"
+  V (PAT|PATSBJ) "PATSBJ"
+  V-T NMTOKEN #FIXED "ST"
+  V-HL7_NAME CDATA   #FIXED "code"
+  DN CDATA #IMPLIED
+  DN-T NMTOKEN #FIXED "ST"
+  DN-HL7_NAME CDATA #FIXED "displayName"
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'type_cd'>
+
+<!ELEMENT is_known_by (
+  id+,
+  is_known_to,
+  local_header*)>
+<!ATTLIST is_known_by
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'is_known_by'
+  T CDATA #FIXED 'person_provider_association'>
+
+<!ELEMENT is_known_to (
+  id+,
+  local_header*)>
+<!ATTLIST is_known_to
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'is_known_to'
+  T CDATA #FIXED 'healthcare_service_provider'>
+
+<!ELEMENT birth_dttm %TS-cont.model;>
+<!ATTLIST birth_dttm
+  %TS-attrib.list;
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'birth_dttm'>
+
+<!ELEMENT administrative_gender_cd %CE-cont.model;>
+<!ATTLIST administrative_gender_cd
+  %CE-attrib.list;
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'administrative_gender_cd'>
+
+<!--
+============================================================
+Service Targets :: Originating Device
+
+Elements declared in this section include:
+<originating_device>, <originating_device.type_cd>, <device>, <responsibility>, <responsibility.type_cd>, <responsibility_tmr>
+============================================================
+-->
+
+<!ELEMENT originating_device (
+  originating_device.type_cd,
+  participation_tmr?,
+  device,
+  local_header*)>
+<!ATTLIST originating_device
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'has_service_target'
+  T CDATA #FIXED 'service_target'>
+
+<!ELEMENT originating_device.type_cd %CS-cont.model;>
+<!ATTLIST originating_device.type_cd
+  T NMTOKEN #FIXED "CS"
+  V CDATA #FIXED "ODV"
+  V-T NMTOKEN #FIXED "ST"
+  V-HL7_NAME CDATA   #FIXED "code"
+  DN CDATA #IMPLIED
+  DN-T NMTOKEN #FIXED "ST"
+  DN-HL7_NAME CDATA #FIXED "displayName"
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'type_cd'>
+
+<!ELEMENT device (
+  id+,
+  responsibility*,
+  local_header*)>
+<!ATTLIST device
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'participation_of_material'
+  T CDATA #FIXED 'device'>
+
+<!ELEMENT responsibility (
+  responsibility.type_cd?,
+  responsibility_tmr?,
+  person,
+  local_header*)>
+<!ATTLIST responsibility
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'is_the_responsibility'
+  T CDATA #FIXED 'responsibility'>
+
+<!ELEMENT responsibility.type_cd %CE-cont.model;>
+<!ATTLIST responsibility.type_cd
+  %CE-attrib.list;
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'type_cd'>
+
+<!ELEMENT responsibility_tmr %IVL_TS-cont.model;>
+<!ATTLIST responsibility_tmr
+  %IVL_TS-attrib.list;
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'tmr'>
+
+<!--
+============================================================
+Service Targets :: Other Service Targets
+
+Elements declared in this section include:
+<service_target>, <service_target.type_cd>
+============================================================
+-->
+
+<!ELEMENT service_target (
+  service_target.type_cd,
+  participation_tmr?,
+  person,
+  local_header*)>
+<!ATTLIST service_target
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'has_service_target'
+  T CDATA #FIXED 'service_target'>
+
+<!ELEMENT service_target.type_cd %CE-cont.model;>
+<!ATTLIST service_target.type_cd
+  %CE-attrib.list;
+  %common_atts;
+  HL7-NAME CDATA #FIXED 'type_cd'>
+
+<!--
+============================================================
+============================================================
+Local Header Information
+
+Locally-defined markup must be used when local semantics have no corresponding representation in the CDA specification. CDA seeks to standardize the highest level of shared meaning while providing a clean and standard mechanism for tagging meaning that is not shared. This is achieved with the CDA <local_header> element. 
+
+The <local_header> element is optionally repeating, and recursive. The "descriptor" attribute describes the element, and the value can be drawn from a local vocabulary domain. The "ignore" attribute tells the receiver to ignore just the <local_header> tag (ignore="markup"), or to ignore the <local_header> tag and all contained content (ignore="all"). The "render" attribute indicates how the sender would render the contents. The value can be drawn from a local vocabulary domain. The language of contained character data can be specified using the xml:lang attribute (see 3.3.2.4.1 Character data). The nested <local_attr> element is provided to make it easier to map local XML attribute values into local markup.
+============================================================
+============================================================
+-->
+
+<!ELEMENT local_header (#PCDATA | local_header | local_attr)* >
+<!ATTLIST local_header
+  ignore (all | markup) "markup"
+  descriptor CDATA #IMPLIED
+  render CDATA #IMPLIED
+  %common_atts;
+  xml:lang NMTOKEN #IMPLIED >
+
+<!ELEMENT local_attr EMPTY>
+<!ATTLIST local_attr
+  name NMTOKEN #REQUIRED
+  value CDATA #REQUIRED
+  %common_atts;
+  xml:lang NMTOKEN #IMPLIED>
+<!--
+============================================================
+============================================================
+HL7 Clinical Document Architecture, Version 1.0
+
+CDA Level One DTD 
+
+Public Identifier :: "-//HL7//DTD CDA Level One 1.0//EN"
+
+DTD Last Revised: September 18, 2000
+============================================================
+============================================================
+-->
+
+
+<!--
+============================================================
+============================================================
+The following system id must be changed to point to the location of the Header file on your system.
+============================================================
+============================================================
+-->
+
+<!ENTITY % CDA-Header-1.0 PUBLIC 
+  "-//HL7//DTD CDA Header 1.0//EN" 
+  "header_1.0.dtd" >
+%CDA-Header-1.0;
+
+
+<!--
+============================================================
+============================================================
+Shared XML attributes 
+
+XML element identification
+Every XML element within a CDA document has an optional identifier, which must be unique within the document. (See 3.2.2.1.1 XML element identification). (This attribute is declared in the CDA Header DTD.)
+
+Confidentiality
+The confidentiality attribute can occur on any element within the CDA body. The CDA Header contains an optionally repeating element <confidentiality_cd> (see 3.2.2.2.3 Document confidentiality). The confidentiality attribute on CDA Body elements can reference one or more of the confidentiality values in the CDA Header using XML IDREFS. The value(s) referenced must be XML ID(s) in the <confidentiality_cd> element of the CDA Header. Confidentiality is inherited by nested content, unless overridden.
+
+Originators
+The originator attribute can occur on any element within the CDA body. The CDA Header contains optionally repeating elements <originator> (see 3.2.2.4.4.1 Originating person) and <originating_device> (see 3.2.2.5.2 Originating device). The originator attribute on an element within the CDA Body can reference one or more of these values using XML IDREFS. The value(s) referenced must be XML ID(s) in the <originator> or <originating_device> element of the CDA Header. Origination is inherited by nested content, unless overridden.
+============================================================
+============================================================
+-->
+
+<!ENTITY % body_atts  "
+  %common_atts;
+  originator IDREFS #IMPLIED
+  confidentiality IDREFS #IMPLIED
+  xml:lang NMTOKEN #IMPLIED
+">
+
+<!ENTITY % entries "#PCDATA | content | link | coded_entry | observation_media | local_markup">
+
+<!ENTITY % structures "paragraph | list | table">
+
+
+<!--
+============================================================
+============================================================
+Level One Root
+
+The CDA element <levelone> is the root element of a CDA Level One document. The <levelone> element contains a <clinical_document_header> and a <body>. The <clinical_document_header> is derived from the RIM (see 3.2 CDA Header). The <body> is comprised of either <section> elements, or a <non_xml> element, which is used when the document body is in some format other then XML. A CDA <section> can contain "structures", nested <section> elements, and <coded_entry> elements. CDA structures include the <paragraph>, <list>, and <table> elements. These structures contain CDA "entries", which include the <content>, <link>, <coded_entry>, <observation_media>, and <local_markup> elements, in addition to plain character data.
+============================================================
+============================================================
+-->
+
+<!ELEMENT levelone (clinical_document_header, body) >
+<!ATTLIST levelone
+  %body_atts;
+>
+
+
+<!--
+============================================================
+============================================================
+Document body and sections
+
+The CDA <body> occurs in the <levelone> element. All CDA documents have exactly one <body>. The <body> contains either one or more <section> elements (see 3.3.2.2.2 Document sections) or a single non_xml data segment (see 3.3.2.2.3 Non_xml body).
+
+The CDA <section> is a container used to wrap other containers. A <section> can occur in the <body>, or can be nested within another <section>. A <section> has an optional <caption> (see 3.3.2.2.2.1 Captions), followed by nested <section> elements or structures (see 3.3.2.3 Document Structures), followed by optionally repeating <coded_entry> elements (see 3.3.2.4.4 Coded entries).
+
+The CDA <non_xml> container represents a document body that is in some format other than XML. CDA's <non_xml> is an encoded data type (ED), which is used only to reference data that is stored externally to the CDA Level One document.
+============================================================
+============================================================
+-->
+
+<!ELEMENT body (section+ | non_xml) >
+<!ATTLIST body 
+  %body_atts;
+>
+
+<!ELEMENT section (caption?,(%structures; | section)*, coded_entry*)>
+<!ATTLIST section
+  %body_atts;
+>
+
+<!ELEMENT non_xml %ED-cont.model;>
+<!ATTLIST non_xml
+  %common_atts;
+  originator IDREFS #IMPLIED
+  confidentiality IDREFS #IMPLIED
+  %ED-attrib.list;
+>
+
+
+<!--
+============================================================
+============================================================
+Entries: 
+content, link, coded_entry, observation_media, local_markup
+
+============================================================
+============================================================
+-->
+
+<!--
+============================================================
+content
+
+CDA <content> occurs in <local_markup>, table cells (<td>), <paragraph>, <item>, and nested within <content>. The <content> element contains zero or more entries (see 3.3.2.4 Document Entries). 
+
+The <content> element can nest recursively, which enables wrapping a string of plain text down to as small a chunk as desired. These <content> elements can serve as anchors, and <coded_entry.value> elements can reference these anchors to indicate the original text that supports the use of a coded entry. (See 3.3.2.4.4 Coded entries for more detail.)
+============================================================
+-->
+
+<!ELEMENT content (%entries;)*>
+<!ATTLIST content
+  %body_atts;
+>
+
+
+<!--
+============================================================
+link
+
+The CDA <link> is a generic referencing mechanism and occurs within <content>, <local_markup>, table cells (<td>), or <caption>. A <link> contains a single required <link_html> element.
+
+The CDA <link_html> can only occur within a <link>. Each <link_html> has an optional local identifier (see 3.3.2.1.1 XML element identification), an optional set of confidentiality status flags (see 3.3.2.1.2 Confidentiality), and an optional set of originators (see 3.3.2.1.3 Originators). The human language of contained character data can be specified using the xml:lang attribute (see 3.3.2.1.4 Language).
+
+The CDA link mechanism is based on the HTML anchor tag. Several groups (see 5.4 References) are actively developing formal link specifications. When a suitable open standard is available and implemented, it will be reviewed with the intent to incorporate it into the CDA Level One specification.
+
+Multimedia that is integral to a document, and part of the attestable content of the document requires the use of <observation_media> (see 3.3.2.4.5 Observation media). Multimedia that is simply referenced by the document and not an integral part of the document should use <link>.
+============================================================
+-->
+
+<!ELEMENT link (link_html) >
+<!ATTLIST link
+  %body_atts;
+>
+
+<!ELEMENT link_html (#PCDATA) >
+<!ATTLIST link_html
+  name    CDATA   #IMPLIED    
+  href    CDATA   #IMPLIED   
+  rel     CDATA   #IMPLIED 
+  rev     CDATA   #IMPLIED  
+  title   CDATA   #IMPLIED  
+  %body_atts;
+>
+
+
+<!--
+============================================================
+coded_entry
+
+The CDA element <coded_entry> inserts codes from HL7-recognized coding schemes into CDA documents. Where there are no suitable HL7-recognized codes available, locally-defined codes can be used. The use of <coded_entry> in CDA Level One is unrestricted, and the primary intent of <coded_entry> is to facilitate document indexing, search and retrieval, and to provide a standard convention for insertion of locally-meaningful codes.
+
+The <coded_entry.value> element can explicitly reference the original text within the document that supports the use of the code.
+============================================================
+-->
+
+<!ELEMENT coded_entry (coded_entry.id?, coded_entry.value, local_markup*)>
+<!ATTLIST coded_entry 
+  %body_atts;>
+
+<!ELEMENT coded_entry.id %II-cont.model;>
+<!ATTLIST coded_entry.id
+  %common_atts;
+  %II-attrib.list; >
+
+<!ELEMENT coded_entry.value %CD-cont.model;>
+<!ATTLIST coded_entry.value
+  %CD-attrib.list;
+  %common_atts;>
+
+<!--
+============================================================
+observation_media
+
+The <observation_media> element represents media that is logically a part of a CDA document, but is stored outside the document and incorporated by reference. Multimedia that is integral to a document, and part of the attestable content of the document, requires the use of <observation_media>. Multimedia that is simply referenced by the document and not an integral part of the document should use <link> (see 3.3.2.4.3 Links). Note that CDA's <observation_media> is used only to reference data that is stored externally.
+
+The CDA does not take advantage of ED's ability to Base64 encode images and other observation media and include them directly in a document instance file. Several groups (see 5.4 References) are actively developing formal specifications for packaging binary data within XML documents. When a suitable open standard for direct incorporation of binary data is available and implemented, it will be incorporated into the CDA Level One specification.
+============================================================
+-->
+
+<!ELEMENT observation_media (observation_media.id?, observation_media.value, local_markup*)>
+<!ATTLIST observation_media 
+  %body_atts;
+  HL7-NAME CDATA #FIXED 'observation'
+  T CDATA #FIXED 'observation'>
+
+<!ELEMENT observation_media.id %II-cont.model;>
+<!ATTLIST observation_media.id
+  %common_atts;
+  %II-attrib.list;
+  HL7-NAME CDATA #FIXED 'id'>
+
+<!ELEMENT observation_media.value %ED-cont.model;>
+<!ATTLIST observation_media.value
+  %common_atts;
+  %ED-attrib.list;
+  HL7-NAME CDATA #FIXED 'value'>
+
+
+<!--
+============================================================
+local_markup
+
+The implementation of localization in the CDA Level One Body using the <local_markup> element parallels the implementation described for the CDA Header (see 3.2.2.6 Localization).
+
+The descriptor attribute describes the element, and the value can be drawn from a local vocabulary domain. The ignore attribute tells the receiver to ignore just the <local_markup> tag (ignore="markup"), or to ignore the <local_markup> tag and all contained content (ignore="all"). The render attribute indicates how the sender would render the contents. The value can be drawn from a local vocabulary domain. The nested <local_attr> element makes it easier to map local XML attribute values into the CDA.
+============================================================
+-->
+
+<!ELEMENT local_markup (%entries; | local_attr)* >
+<!ATTLIST local_markup
+  ignore (all | markup) "markup"
+  descriptor CDATA #IMPLIED
+  render CDATA #IMPLIED
+  %body_atts;
+>
+
+
+<!--
+============================================================
+============================================================
+Structures:
+paragraph, list, table
+
+============================================================
+============================================================
+-->
+
+<!--
+============================================================
+paragraph
+
+The CDA <paragraph> can occur in a <section>, <item>, or table cell (<td>). A <paragraph> has an optional <caption> (see 3.3.2.2.2.1 Captions), followed by zero or more <content> elements (see 3.3.2.4.2 Content).
+============================================================
+-->
+
+<!ELEMENT paragraph (caption?, content*) >
+<!ATTLIST paragraph
+  %body_atts;
+>
+
+
+<!--
+============================================================
+list and item
+
+The CDA <list> can occur in a <section>, <item>, or table cell (<td>). A <list> has an optional <caption> (see 3.3.2.2.2.1 Captions), and contains one or more <item> elements. The list_type attribute specifies whether the <list> is ordered or unordered (with unordered being the default). Use an ordered list when the ordering of list items is meaningful.
+
+The CDA <item> only occurs within a <list>. An <item> has an optional <caption> (see 3.3.2.2.2.1 Captions), and may contain <content> (see 3.3.2.4.2 Content) and nested structures (see 3.3.2.3 Document Structures).
+============================================================
+-->
+
+<!ELEMENT list (caption?, item+)>
+<!ATTLIST list 
+  %body_atts;
+  list_type (ordered | unordered) "unordered" 
+>
+
+<!ELEMENT item (caption?, (content | %structures;)*)>
+<!ATTLIST item
+  %body_atts;
+>
+
+
+<!-- 
+============================================================
+table
+
+In CDA Level One, any information can be presented as a table. The table markup is for presentation purposes only and, unlike a database table, does not possess meaningful field names. The CDA <table> can occur in a <section> or <item>. A <table> has an optional <caption> (see 3.3.2.2.2.1 Captions).
+
+CDA modifies the strict XHTML table model (see 5.4 References and Appendix 5.3.1 Tables) by removing formatting tags and by setting the content model of cells to be similar to the contents of other CDA containers. The <th> element is modeled analogously to the <caption> element (see 3.3.2.2.2.1 Captions), and like the <caption> element, the <caption_cd> is optional and non-repeatable, and must occur first.
+
+Changes to the strict XHTML table model in CDA include:
+
+Change this:
+  <!ELEMENT caption  %Inline;>
+To this:
+  <!ELEMENT caption (#PCDATA | link | caption_cd)*>
+
+Change these XML attributes:
+  %attrs;
+To these:
+  ID ID #IMPLIED
+  confidentiality IDREFS #IMPLIED
+  originator IDREFS #IMPLIED
+  xml:lang NMTOKEN #IMPLIED
+
+Change this:
+  <!ELEMENT td %Flow;>
+to this:
+  <!ELEMENT td (#PCDATA | content | link | coded_entry | observation_media | paragraph | list | local_markup)*>
+
+change this:
+  <!ELEMENT th %Flow;>
+to this:
+  <!ELEMENT th (#PCDATA | link | caption_cd)*>
+============================================================
+-->
+
+<!--===== XHTML entities used in the XHTML table model ===========-->
+
+<!ENTITY % Character "CDATA">
+    <!-- a single character from [ISO10646] -->
+
+<!ENTITY % Length "CDATA">
+    <!-- nn for pixels or nn% for percentage length -->
+
+<!ENTITY % MultiLength "CDATA">
+    <!-- pixel, percentage, or relative -->
+
+<!ENTITY % Number "CDATA">
+    <!-- one or more digits -->
+
+<!ENTITY % Pixels "CDATA">
+    <!-- integer representing length in pixels -->
+
+<!ENTITY % Text "CDATA">
+
+<!--======================= Tables =======================================-->
+
+<!-- Derived from IETF HTML table standard, see [RFC1942] -->
+
+<!--
+ The border attribute sets the thickness of the frame around the
+ table. The default units are screen pixels.
+
+ The frame attribute specifies which parts of the frame around
+ the table should be rendered. The values are not the same as
+ CALS to avoid a name clash with the valign attribute.
+-->
+<!ENTITY % TFrame "(void|above|below|hsides|lhs|rhs|vsides|box|border)">
+
+<!--
+ The rules attribute defines which rules to draw between cells:
+
+ If rules is absent then assume:
+     "none" if border is absent or border="0" otherwise "all"
+-->
+
+<!ENTITY % TRules "(none | groups | rows | cols | all)">
+  
+<!-- horizontal alignment attributes for cell contents
+
+  char        alignment char, e.g. char=':'
+  charoff     offset for alignment char
+-->
+<!ENTITY % cellhalign
+  "align      (left|center|right|justify|char) #IMPLIED
+   char       %Character;    #IMPLIED
+   charoff    %Length;       #IMPLIED"
+  >
+
+<!-- vertical alignment attributes for cell contents -->
+<!ENTITY % cellvalign
+  "valign     (top|middle|bottom|baseline) #IMPLIED"
+  >
+
+<!ELEMENT table
+     (caption?, (col*|colgroup*), thead?, tfoot?, (tbody+|tr+))>
+<!ELEMENT caption (#PCDATA | link | caption_cd)*>
+<!ELEMENT caption_cd %CE-cont.model;>
+<!ELEMENT thead    (tr)+>
+<!ELEMENT tfoot    (tr)+>
+<!ELEMENT tbody    (tr)+>
+<!ELEMENT colgroup (col)*>
+<!ELEMENT col      EMPTY>
+<!ELEMENT tr       (th|td)+>
+<!ELEMENT th       (#PCDATA | link | caption_cd)*>
+<!ELEMENT td       (%entries; | paragraph | list)*>
+
+<!ATTLIST table
+  %body_atts;
+  summary     %Text;         #IMPLIED
+  width       %Length;       #IMPLIED
+  border      %Pixels;       #IMPLIED
+  frame       %TFrame;       #IMPLIED
+  rules       %TRules;       #IMPLIED
+  cellspacing %Length;       #IMPLIED
+  cellpadding %Length;       #IMPLIED
+  >
+
+<!ATTLIST caption
+  %body_atts;
+>
+
+<!ATTLIST caption_cd
+  %body_atts;
+  %CE-attrib.list;
+>
+
+<!--
+colgroup groups a set of col elements. It allows you to group
+several semantically related columns together.
+-->
+<!ATTLIST colgroup
+  %body_atts;
+  span        %Number;       "1"
+  width       %MultiLength;  #IMPLIED
+  %cellhalign;
+  %cellvalign;
+  >
+
+<!--
+ col elements define the alignment properties for cells in
+ one or more columns.
+
+ The width attribute specifies the width of the columns, e.g.
+
+     width=64        width in screen pixels
+     width=0.5*      relative width of 0.5
+
+ The span attribute causes the attributes of one
+ col element to apply to more than one column.
+-->
+<!ATTLIST col
+  %body_atts;
+  span        %Number;       "1"
+  width       %MultiLength;  #IMPLIED
+  %cellhalign;
+  %cellvalign;
+  >
+
+<!--
+    Use thead to duplicate headers when breaking table
+    across page boundaries, or for static headers when
+    tbody sections are rendered in scrolling panel.
+
+    Use tfoot to duplicate footers when breaking table
+    across page boundaries, or for static footers when
+    tbody sections are rendered in scrolling panel.
+
+    Use multiple tbody sections when rules are needed
+    between groups of table rows.
+-->
+<!ATTLIST thead
+  %body_atts;
+  %cellhalign;
+  %cellvalign;
+  >
+
+<!ATTLIST tfoot
+  %body_atts;
+  %cellhalign;
+  %cellvalign;
+  >
+
+<!ATTLIST tbody
+  %body_atts;
+  %cellhalign;
+  %cellvalign;
+  >
+
+<!ATTLIST tr
+  %body_atts;
+  %cellhalign;
+  %cellvalign;
+>
+
+<!-- Scope is simpler than headers attribute for common tables -->
+<!ENTITY % Scope "(row|col|rowgroup|colgroup)">
+
+<!-- th is for headers, td for data and for cells acting as both -->
+
+<!ATTLIST th
+  %body_atts;
+  abbr        %Text;         #IMPLIED
+  axis        CDATA          #IMPLIED
+  headers     IDREFS         #IMPLIED
+  scope       %Scope;        #IMPLIED
+  rowspan     %Number;       "1"
+  colspan     %Number;       "1"
+  %cellhalign;
+  %cellvalign;
+ >
+
+<!ATTLIST td
+  %body_atts;
+  abbr        %Text;         #IMPLIED
+  axis        CDATA          #IMPLIED
+  headers     IDREFS         #IMPLIED
+  scope       %Scope;        #IMPLIED
+  rowspan     %Number;       "1"
+  colspan     %Number;       "1"
+  %cellhalign;
+  %cellvalign;
+  >

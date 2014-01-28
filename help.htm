@@ -1,0 +1,21 @@
+<HTML>
+<HEAD>
+<LINK REL="stylesheet" TYPE="text/css" HREF="htm.css"/>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<CENTER>
+<TABLE BORDER="1" CELLSPACING="0" CELLPADDING="7">
+<TR><TH BGCOLOR="#eeeeee">Parameter</TH><TH>Meaning</TH></TR>
+<TR><TD BGCOLOR="#eeeeee">DTD</TD><TD>URI of DTD relative to directory of <I>dtd2xs</I>.</TD></TR>
+<TR><TD BGCOLOR="#eeeeee">Map DTD entities</TD><TD>Map DTD entity &lt;!ENTITY&nbsp;<I>name</I>&nbsp;...&nbsp;&gt; onto XML Schema &lt;group&nbsp;name="<I>name</I>"&gt;, &lt;attributeGroup&nbsp;name="<I>name</I>"&gt; and &lt;simpleType&nbsp;name="<I>name</I>"&gt; where appropriate.</TD></TR>
+<TR><TD BGCOLOR="#eeeeee">Map DTD comments</TD><TD>Map DTD comment &lt;!--&nbsp;<I>description</I>&nbsp;--&gt; onto XML Schema &lt;annotation&gt;&lt;documentation&gt;<I>description</I>&lt;/annotation&gt;&lt;/documentation&gt;. The subsequent parameters control the mapping.</TD></TR>
+<TR><TD BGCOLOR="#eeeeee">Max. length comment</TD><TD>DTD comments with more characters are not considered for mapping.</TD></TR>
+<TR><TD BGCOLOR="#eeeeee">Comment language</TD><TD>Specify the comment language in the "xml:lang" attribute: &lt;annotation&gt;&lt;documentation&nbsp;<I>xml:lang="en"</I>&gt;&nbsp;...</TD></TR>
+<TR><TD BGCOLOR="#eeeeee">Annotation of</TD><TD>Which XML Schema constructs do you want to annotate? E.g., &lt;element&gt;&lt;annotation&gt;&nbsp;...</TD></TR>
+<TR><TD BGCOLOR="#eeeeee">Concept highlight</TD><TD>A model concept (name, value) must be highlighted in a DTD comment. We distinguish three levels of highlighting: no highlighting, highlighting by space/punctuation, highlighting by quotes/parentheses.</TD></TR>
+<TR><TD BGCOLOR="#eeeeee">Min. concept occurrence</TD><TD>If a model concept occurs less times in a DTD comment it is not considered for XML Schema &lt;annotation&gt;.</TD></TR>
+<TR><TD BGCOLOR="#eeeeee">XML schema</TD><TD>The right frame logs the mapping process and the mapping result (XML schema).</TD></TR>
+</TABLE>
+</CENTER>
+</BODY>
+</HTML>

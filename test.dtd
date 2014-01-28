@@ -1,0 +1,23 @@
+<?xml version = "1.0" encoding="iso-8859-1"?>
+<!DOCTYPE personen [
+<!ELEMENT personen      (person)*>
+<!-- person: arzt, patient -->
+<!ELEMENT person        (arzt|patient)>
+<!ELEMENT arzt          (name, vorname, (strasse, plz, ort)? )> <!-- "arzt" -->
+<!ELEMENT patient       (name, vorname, strasse, plz, ort, diagnosen*)>
+<!ELEMENT diagnosen     (diagnose*)>
+<!ELEMENT name          (#PCDATA)>
+<!ELEMENT vorname       (#PCDATA)>
+<!ELEMENT strasse       (#PCDATA)>
+<!ELEMENT plz           (#PCDATA)>
+<!ELEMENT ort           (#PCDATA)>
+<!ELEMENT diagnose      (#PCDATA)>
+
+<!ATTLIST patient 
+	pat_id   CDATA                  #REQUIRED
+	kennung  (intern|extern|beides) #REQUIRED
+	hausarzt IDREF                  #IMPLIED> 	
+<!ATTLIST arzt
+	lfdnr    ID                     #REQUIRED>
+] >
+<personen/>

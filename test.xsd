@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:element name="personen">
+<xs:complexType>
+<xs:sequence maxOccurs="unbounded" minOccurs="0">
+<xs:element ref="person"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="person">
+<xs:complexType>
+<xs:choice>
+<xs:element ref="arzt"/>
+<xs:element ref="patient"/>
+</xs:choice>
+</xs:complexType>
+</xs:element>
+<xs:element name="arzt">
+<xs:complexType>
+<xs:sequence>
+<xs:element ref="name"/>
+<xs:element ref="vorname"/>
+<xs:sequence minOccurs="0">
+<xs:element ref="strasse"/>
+<xs:element ref="plz"/>
+<xs:element ref="ort"/>
+</xs:sequence>
+</xs:sequence>
+<xs:attribute name="lfdnr" type="xs:ID" use="required"/>
+</xs:complexType>
+</xs:element>
+<xs:element name="patient">
+<xs:complexType>
+<xs:sequence>
+<xs:element ref="name"/>
+<xs:element ref="vorname"/>
+<xs:element ref="strasse"/>
+<xs:element ref="plz"/>
+<xs:element ref="ort"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" ref="diagnosen"/>
+</xs:sequence>
+<xs:attribute name="pat_id" type="xs:string" use="required"/>
+<xs:attribute name="kennung" use="required">
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:enumeration value="intern"/>
+<xs:enumeration value="extern"/>
+<xs:enumeration value="beides"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:attribute>
+<xs:attribute name="hausarzt" type="xs:IDREF"/>
+</xs:complexType>
+</xs:element>
+<xs:element name="diagnosen">
+<xs:complexType>
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" ref="diagnose"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="name" type="xs:string"/>
+<xs:element name="vorname" type="xs:string"/>
+<xs:element name="strasse" type="xs:string"/>
+<xs:element name="plz" type="xs:string"/>
+<xs:element name="ort" type="xs:string"/>
+<xs:element name="diagnose" type="xs:string"/>
+</xs:schema>
+

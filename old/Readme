@@ -1,0 +1,19 @@
+
+DTD to XML Schema translator
+----------------------------
+
+For compatibility reasons we provide this version of dtd2xs for usage with
+Java version <1.4.
+
+If you are using Java version >1.4 you should use the file located in 
+the upper directory.
+
+This dtd2xs version uses the XML classes of James Clark.
+
+Feedback
+--------
+We would like to here from you, please send questions or requests for
+information about our latest developments to:
+
+Ralf.Schweiger@informatik.med.uni-giessen.de
+

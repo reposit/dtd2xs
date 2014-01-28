@@ -1,0 +1,31 @@
+- v1.6
+ - Chuck Morris: Added support for JAXP
+
+- v1.55
+ - File URLs containig non-URL characters (e.g. blank) are now correctly URL encoded
+ 
+- v1.54
+ - Marcel Rassinger: Map #PCDATA onto xs:string instead of xs:anyType (default)
+
+- v1.53
+ - Ole Hoppe: colonized names must not be used in attribute names (use attribute ref)
+ - Broader browser support (OBJECT, EMBED, APPLET)
+
+- v1.52
+ - XML Schema groups (choice, sequence) with a single child 
+   element are optimized.
+ - xmlschema.dtd has been added as another test example.
+
+- v1.51
+ - The dtd2xs translator is now available for software development 
+   (dtd2xs.java), as standalone application (dtd2xsd.java) and in 
+   the Web browser (dtd2xsd.html).
+ - Bassam Abdul-Baki: Improve description.
+
+- v1.5
+ - Web interface
+ - John O'Reilly: Missing Java archives.
+ - Michael Mallia: Missing Java classes for re-compilation.
+ - Chris McClelland: Minor problem with white space in the DTD.
+
+- v1.0
